@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasyczne Gry - Strona Główna</title>
+    <link rel="stylesheet" href="style-home.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo" data-i18n="logo">🎮 Klasyczne Gry</div>
+            <div class="nav-right">
+                <div class="user-info">
+                    <span class="username" id="username" data-i18n="guest">Gość</span>
+                    <button class="nav-btn" onclick="window.location.href='login.html'" id="loginBtn" data-i18n="login">Zaloguj się</button>
+                </div>
+                <!-- Przełącznik języka w navbarze -->
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+                    <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')" title="English">🇬🇧</button>
+                    <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1 class="hero-title" data-i18n="heroTitle">Witaj w świecie klasycznych gier!</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">Zagraj w legendarne gry, zdobywaj punkty i rywalizuj z przyjaciółmi</p>
+    </div>
+
+    <div class="container">
+        <div class="games-grid">
+            <!-- Kółko i Krzyżyk -->
+            <div class="game-card available" onclick="window.location.href='kolko-i-krzyzyk.html'">
+                <div class="game-badge" data-i18n="available">Dostępne</div>
+                <div class="game-icon">⭕❌</div>
+                <h2 data-i18n="tictactoe">Kółko i Krzyżyk</h2>
+                <p data-i18n="tictactoeDesc">Klasyczna gra strategiczna. Ułóż trzy symbole w rzędzie i wygraj!</p>
+                <div class="game-stats">
+                    <span>🏆 <span id="tictactoe-wins">0</span> <span data-i18n="wins">wygranych</span></span>
+                    <span>⭐ <span id="tictactoe-points">0</span> <span data-i18n="points">pkt</span></span>
+                </div>
+                <button class="play-btn" data-i18n="playNow">Zagraj teraz →</button>
+            </div>
+
+            <!-- Statki -->
+            <div class="game-card available" onclick="window.location.href='statki.html'">
+                <div class="game-badge" data-i18n="available">Dostępne</div>
+                <div class="game-icon">🚢</div>
+                <h2 data-i18n="battleship">Statki</h2>
+                <p data-i18n="battleshipDesc">Strategiczna bitwa morska. Zatop flotę przeciwnika!</p>
+                <div class="game-stats">
+                    <span>🏆 <span id="battleship-wins">0</span> <span data-i18n="wins">wygranych</span></span>
+                    <span>⭐ <span id="battleship-points">0</span> <span data-i18n="points">pkt</span></span>
+                </div>
+                <button class="play-btn" data-i18n="playNow">Zagraj teraz →</button>
+            </div>
+
+            <!-- Wisielec - Wkrótce -->
+            <div class="game-card coming-soon">
+                <div class="game-badge soon" data-i18n="comingSoon">Wkrótce</div>
+                <div class="game-icon">🎯</div>
+                <h2 data-i18n="hangman">Wisielec</h2>
+                <p data-i18n="hangmanDesc">Odgadnij hasło zanim skończą się próby. Sprawdź swoją wiedzę!</p>
+                <div class="game-stats">
+                    <span>🏆 0 <span data-i18n="wins">wygranych</span></span>
+                    <span>⭐ 0 <span data-i18n="points">pkt</span></span>
+                </div>
+                <div class="soon-overlay" data-i18n="soonText">Już niedługo!</div>
+            </div>
+        </div>
+
+        <div class="leaderboard">
+            <h2 data-i18n="leaderboard">🏆 Ranking Graczy</h2>
+            <div class="leaderboard-list" id="leaderboard">
+                <!-- Ranking będzie wczytany dynamicznie -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p data-i18n="footer">© 2025 Klasyczne Gry | Stworzone z ❤️ dla miłośników retro gier</p>
+    </footer>
+
+    <script src="translations.js"></script>
+    <script src="home.js"></script>
+</body>
+</html>

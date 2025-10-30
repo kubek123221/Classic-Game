@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statki - Klasyczne Gry</title>
+    <link rel="stylesheet" href="style-statki.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <!-- Przełącznik języka -->
+    <div class="language-selector-top">
+        <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+        <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')" title="English">🇬🇧</button>
+        <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-btn" data-i18n="backToMenu">← Powrót do menu</a>
+        
+        <h1 data-i18n="battleshipTitle">🚢 Statki 🎯</h1>
+        <p class="subtitle" data-i18n="battleshipSubtitle">Zatop flotę przeciwnika!</p>
+
+        <!-- Wybór trybu gry -->
+        <div class="game-mode-selection" id="gameModeSelection">
+            <h2 data-i18n="selectGameMode">Wybierz tryb gry:</h2>
+            <div class="mode-buttons">
+                <button class="mode-card" onclick="selectMode('bot')">
+                    <div class="mode-icon">🤖</div>
+                    <h3 data-i18n="playVsBot">Gra z Botem</h3>
+                    <p data-i18n="botModeDesc">Zagraj przeciwko AI</p>
+                </button>
+                <button class="mode-card" onclick="selectMode('online')">
+                    <div class="mode-icon">🌐</div>
+                    <h3 data-i18n="playOnline">Gra Online</h3>
+                    <p data-i18n="onlineModeDesc">Zagraj z innym graczem</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel wyszukiwania gracza -->
+        <div class="player-search" id="playerSearch" style="display: none;">
+            <h2 data-i18n="findPlayer">Znajdź gracza</h2>
+            <p class="search-info" data-i18n="searchInfo">Wyszukaj zarejestrowanego gracza po nicku</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" data-i18n-placeholder="enterPlayerNick" placeholder="Wpisz nick gracza..." oninput="searchPlayers()">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            <button class="btn btn-secondary" onclick="backToModeSelection()" data-i18n="backBtn">← Powrót</button>
+        </div>
+
+        <!-- Panel gry -->
+        <div class="game-panel" id="gamePanel" style="display: none;">
+            <!-- Informacje o flocie -->
+            <div class="fleet-info">
+                <div class="fleet-panel">
+                    <h3 data-i18n="yourFleet">🚢 Twoja flota</h3>
+                    <div class="ships-list" id="playerShipsList">
+                        <div class="ship-status">
+                            <span class="ship-name">🚢 <span data-i18n="battleshipShip">Pancernik</span> (4)</span>
+                            <div class="ship-lives" id="player-ship-4">
+                                <span class="life active"></span>
+                                <span class="life active"></span>
+                                <span class="life active"></span>
+                                <span class="life active"></span>
+                            </div>
+                        </div>
+                        <div class="ship-status">
+                            <span class="ship-name">⛴️ <span data-i18n="cruiser">Krążownik</span> (3) x2</span>
+                            <div class="ship-lives-group">
+                                <div class="ship-lives" id="player-ship-3-0">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="player-ship-3-1">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ship-status">
+                            <span class="ship-name">🛥️ <span data-i18n="destroyer">Niszczyciel</span> (2) x3</span>
+                            <div class="ship-lives-group">
+                                <div class="ship-lives" id="player-ship-2-0">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="player-ship-2-1">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="player-ship-2-2">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ship-status">
+                            <span class="ship-name">⛵ <span data-i18n="submarine">Łódź</span> (1) x4</span>
+                            <div class="ship-lives-group">
+                                <div class="ship-lives" id="player-ship-1-0">
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="player-ship-1-1">
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="player-ship-1-2">
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="player-ship-1-3">
+                                    <span class="life active"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-status-center">
+                    <h2 id="gameStatusTitle" data-i18n="setupPhase">Rozmieść swoje statki!</h2>
+                    <p class="status-text" id="statusText" data-i18n="clickAutoSetup">Kliknij "Rozstaw automatycznie"</p>
+                    <div class="opponent-info" id="opponentInfo" style="display: none;">
+                        <p><span data-i18n="opponent">Przeciwnik:</span> <strong id="opponentName"></strong></p>
+                    </div>
+                </div>
+
+                <div class="fleet-panel">
+                    <h3 data-i18n="enemyFleet">💀 Flota wroga</h3>
+                    <div class="ships-list" id="enemyShipsList">
+                        <div class="ship-status">
+                            <span class="ship-name">🚢 <span data-i18n="battleshipShip">Pancernik</span> (4)</span>
+                            <div class="ship-lives" id="enemy-ship-4">
+                                <span class="life active"></span>
+                                <span class="life active"></span>
+                                <span class="life active"></span>
+                                <span class="life active"></span>
+                            </div>
+                        </div>
+                        <div class="ship-status">
+                            <span class="ship-name">⛴️ <span data-i18n="cruiser">Krążownik</span> (3) x2</span>
+                            <div class="ship-lives-group">
+                                <div class="ship-lives" id="enemy-ship-3-0">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="enemy-ship-3-1">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ship-status">
+                            <span class="ship-name">🛥️ <span data-i18n="destroyer">Niszczyciel</span> (2) x3</span>
+                            <div class="ship-lives-group">
+                                <div class="ship-lives" id="enemy-ship-2-0">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="enemy-ship-2-1">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="enemy-ship-2-2">
+                                    <span class="life active"></span>
+                                    <span class="life active"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ship-status">
+                            <span class="ship-name">⛵ <span data-i18n="submarine">Łódź</span> (1) x4</span>
+                            <div class="ship-lives-group">
+                                <div class="ship-lives" id="enemy-ship-1-0">
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="enemy-ship-1-1">
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="enemy-ship-1-2">
+                                    <span class="life active"></span>
+                                </div>
+                                <div class="ship-lives" id="enemy-ship-1-3">
+                                    <span class="life active"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Przyciski kontrolne -->
+            <div class="controls" id="setupControls">
+                <button class="btn btn-primary" onclick="autoSetupShips()" data-i18n="autoSetup">🎲 Rozstaw automatycznie</button>
+                <button class="btn btn-success" onclick="startBattle()" id="startBtn" disabled data-i18n="startBattle">⚔️ Rozpocznij bitwę!</button>
+            </div>
+
+            <div class="controls" id="gameControls" style="display: none;">
+                <button class="btn btn-primary" onclick="newGame()" data-i18n="newGame">🔄 Nowa gra</button>
+            </div>
+
+            <!-- Plansze z numeracją -->
+            <div class="boards-container">
+                <!-- Plansza gracza -->
+                <div class="board-wrapper">
+                    <h3 data-i18n="yourBoard">Twoja plansza</h3>
+                    <div class="board-with-coords">
+                        <div class="coords-top">
+                            <div class="coord-corner"></div>
+                            <div class="coord">1</div>
+                            <div class="coord">2</div>
+                            <div class="coord">3</div>
+                            <div class="coord">4</div>
+                            <div class="coord">5</div>
+                            <div class="coord">6</div>
+                            <div class="coord">7</div>
+                            <div class="coord">8</div>
+                            <div class="coord">9</div>
+                            <div class="coord">10</div>
+                        </div>
+                        <div class="board-row">
+                            <div class="coords-left">
+                                <div class="coord">A</div>
+                                <div class="coord">B</div>
+                                <div class="coord">C</div>
+                                <div class="coord">D</div>
+                                <div class="coord">E</div>
+                                <div class="coord">F</div>
+                                <div class="coord">G</div>
+                                <div class="coord">H</div>
+                                <div class="coord">I</div>
+                                <div class="coord">J</div>
+                            </div>
+                            <div class="board" id="playerBoard"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plansza wroga -->
+                <div class="board-wrapper">
+                    <h3 data-i18n="enemyBoard">Plansza wroga</h3>
+                    <div class="board-with-coords">
+                        <div class="coords-top">
+                            <div class="coord-corner"></div>
+                            <div class="coord">1</div>
+                            <div class="coord">2</div>
+                            <div class="coord">3</div>
+                            <div class="coord">4</div>
+                            <div class="coord">5</div>
+                            <div class="coord">6</div>
+                            <div class="coord">7</div>
+                            <div class="coord">8</div>
+                            <div class="coord">9</div>
+                            <div class="coord">10</div>
+                        </div>
+                        <div class="board-row">
+                            <div class="coords-left">
+                                <div class="coord">A</div>
+                                <div class="coord">B</div>
+                                <div class="coord">C</div>
+                                <div class="coord">D</div>
+                                <div class="coord">E</div>
+                                <div class="coord">F</div>
+                                <div class="coord">G</div>
+                                <div class="coord">H</div>
+                                <div class="coord">I</div>
+                                <div class="coord">J</div>
+                            </div>
+                            <div class="board" id="enemyBoard"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statystyki -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="playerHits">0</div>
+                    <div class="stat-label" data-i18n="yourHits">Twoje trafienia</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="playerMisses">0</div>
+                    <div class="stat-label" data-i18n="yourMisses">Twoje pudła</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="enemyHits">0</div>
+                    <div class="stat-label" data-i18n="enemyHits">Trafienia wroga</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="gamesWon">0</div>
+                    <div class="stat-label" data-i18n="gamesWon">Wygrane gry</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="translations.js"></script>
+    <script src="statki.js"></script>
+</body>
+</html>
