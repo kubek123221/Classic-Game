@@ -1,4 +1,5 @@
-// statki.js - Pełna implementacja gry w statki
+// statki.js - Pełna implementacja gry w statki - Firebase version
+import { auth, db, doc, getDoc, updateDoc, collection, getDocs } from './firebase-config.js';
 
 // Stałe gry
 const BOARD_SIZE = 10;
@@ -35,13 +36,22 @@ let gameState = {
 document.addEventListener('DOMContentLoaded', () => {
     loadStats();
     updatePageTranslations();
+    
+    // Wyświetl nazwę użytkownika jeśli zalogowany
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        const usernameNav = document.getElementById('username-nav');
+        if (usernameNav) {
+            usernameNav.textContent = currentUser.username;
+        }
+    }
 });
 
 // ==================== WYBÓR TRYBU GRY ====================
 
 function selectMode(mode) {
     gameState.mode = mode;
-    
+
     if (mode === 'bot') {
         // Rozpocznij grę z botem
         document.getElementById('gameModeSelection').style.display = 'none';
@@ -66,43 +76,54 @@ function backToModeSelection() {
     gameState.mode = null;
 }
 
-// ==================== WYSZUKIWANIE GRACZY ====================
+// ==================== WYSZUKIWANIE GRACZY (FIREBASE) ====================
 
-function searchPlayers() {
+async function searchPlayers() {
     const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
     const searchResults = document.getElementById('searchResults');
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    
+
     if (searchInput.length < 2) {
         searchResults.innerHTML = '';
         return;
     }
-    
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const filteredUsers = users.filter(user => 
-        user.username.toLowerCase().includes(searchInput) && 
-        user.username !== currentUser.username
-    );
-    
-    if (filteredUsers.length === 0) {
-        searchResults.innerHTML = `<div class="no-results" data-i18n="noPlayersFound">Nie znaleziono graczy</div>`;
-        return;
+
+    try {
+        const usersCollection = collection(db, "users");
+        const usersSnapshot = await getDocs(usersCollection);
+        const users = [];
+
+        usersSnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            if (data.username.toLowerCase().includes(searchInput) && 
+                data.email !== currentUser.email) {
+                users.push(data);
+            }
+        });
+
+        if (users.length === 0) {
+            searchResults.innerHTML = `<div class="no-results" data-i18n="noPlayersFound">Nie znaleziono graczy</div>`;
+            return;
+        }
+
+        searchResults.innerHTML = '';
+        users.slice(0, 5).forEach(user => {
+            const battleshipStats = user.stats?.battleship || { wins: 0, losses: 0 };
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'player-result';
+            resultDiv.innerHTML = `
+                <div>
+                    <div class="player-result-name">${user.username}</div>
+                    <div class="player-result-stats">Wygrane: ${battleshipStats.wins} | Przegrane: ${battleshipStats.losses}</div>
+                </div>
+                <button class="btn-select-player" onclick="selectPlayer('${user.username}')">Wybierz</button>
+            `;
+            searchResults.appendChild(resultDiv);
+        });
+    } catch (error) {
+        console.error('Error searching players:', error);
+        searchResults.innerHTML = '<div class="no-results">Błąd wyszukiwania</div>';
     }
-    
-    searchResults.innerHTML = '';
-    filteredUsers.slice(0, 5).forEach(user => {
-        const battleshipStats = user.stats?.battleship || { wins: 0, losses: 0 };
-        const resultDiv = document.createElement('div');
-        resultDiv.className = 'player-result';
-        resultDiv.innerHTML = `
-            <div>
-                <div class="player-result-name">${user.username}</div>
-                <div class="player-result-stats">Wygrane: ${battleshipStats.wins} | Przegrane: ${battleshipStats.losses}</div>
-            </div>
-            <button class="btn-select-player" onclick="selectPlayer('${user.username}')">Wybierz</button>
-        `;
-        searchResults.appendChild(resultDiv);
-    });
 }
 
 function selectPlayer(username) {
@@ -126,10 +147,10 @@ function initGame() {
     gameState.computerLastHit = null;
     gameState.computerTargets = [];
     gameState.computerHitDirection = null;
-    
+
     renderBoard('playerBoard', gameState.playerBoard, true, false);
     renderBoard('enemyBoard', gameState.enemyBoard, false, false);
-    
+
     updateStatusText(t('clickAutoSetup'));
     resetShipLives();
 }
@@ -154,7 +175,7 @@ function createEmptyBoard() {
 function renderBoard(elementId, board, isPlayer, canAttack) {
     const boardElement = document.getElementById(elementId);
     boardElement.innerHTML = '';
-    
+
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let j = 0; j < BOARD_SIZE; j++) {
             const cell = document.createElement('div');
@@ -191,9 +212,9 @@ function renderBoard(elementId, board, isPlayer, canAttack) {
 function autoSetupShips() {
     gameState.playerShips = [];
     gameState.playerBoard = createEmptyBoard();
-    
+
     let allShipsPlaced = true;
-    
+
     SHIPS.forEach(shipType => {
         for (let i = 0; i < shipType.count; i++) {
             let placed = false;
@@ -206,7 +227,7 @@ function autoSetupShips() {
                 
                 if (canPlaceShip(gameState.playerBoard, row, col, shipType.size, horizontal)) {
                     const ship = placeShip(gameState.playerBoard, row, col, shipType.size, horizontal, shipType.name, shipType.icon);
-                    ship.index = i; // Indeks dla wielu statków tego samego typu
+                    ship.index = i;
                     gameState.playerShips.push(ship);
                     placed = true;
                 }
@@ -218,12 +239,12 @@ function autoSetupShips() {
             }
         }
     });
-    
+
     if (!allShipsPlaced) {
         updateStatusText('Nie udało się rozmieścić wszystkich statków. Spróbuj ponownie.');
         return;
     }
-    
+
     renderBoard('playerBoard', gameState.playerBoard, true, false);
     document.getElementById('startBtn').disabled = false;
     updateStatusText(t('shipsPlaced'));
@@ -236,7 +257,7 @@ function canPlaceShip(board, row, col, size, horizontal) {
     } else {
         if (row + size > BOARD_SIZE) return false;
     }
-    
+
     // Sprawdź czy pola są wolne (wraz z otoczeniem)
     for (let i = 0; i < size; i++) {
         const r = horizontal ? row : row + i;
@@ -253,7 +274,7 @@ function canPlaceShip(board, row, col, size, horizontal) {
             }
         }
     }
-    
+
     return true;
 }
 
@@ -266,14 +287,14 @@ function placeShip(board, row, col, size, horizontal, name, icon) {
         icon: icon,
         sunk: false
     };
-    
+
     for (let i = 0; i < size; i++) {
         const r = horizontal ? row : row + i;
         const c = horizontal ? col + i : col;
         board[r][c].ship = ship;
         ship.positions.push({ row: r, col: c });
     }
-    
+
     return ship;
 }
 
@@ -284,11 +305,11 @@ function startBattle() {
         updateStatusText(t('placeShipsFirst'));
         return;
     }
-    
+
     // Rozstaw statki wroga
     gameState.enemyShips = [];
     gameState.enemyBoard = createEmptyBoard();
-    
+
     SHIPS.forEach(shipType => {
         for (let i = 0; i < shipType.count; i++) {
             let placed = false;
@@ -309,14 +330,14 @@ function startBattle() {
             }
         }
     });
-    
+
     gameState.phase = 'battle';
     document.getElementById('setupControls').style.display = 'none';
     document.getElementById('gameControls').style.display = 'flex';
-    
+
     renderBoard('playerBoard', gameState.playerBoard, true, false);
     renderBoard('enemyBoard', gameState.enemyBoard, false, true);
-    
+
     updateStatusText(t('yourTurn'));
     document.getElementById('gameStatusTitle').textContent = t('battleInProgress') || 'Bitwa trwa!';
 }
@@ -325,11 +346,11 @@ function startBattle() {
 
 function handleAttack(row, col) {
     if (!gameState.playerTurn || gameState.phase !== 'battle') return;
-    
+
     const cell = gameState.enemyBoard[row][col];
-    
+
     if (cell.hit || cell.miss) return;
-    
+
     if (cell.ship) {
         // Trafienie!
         cell.hit = true;
@@ -372,7 +393,7 @@ function handleAttack(row, col) {
             }
         }, 1000);
     }
-    
+
     renderBoard('enemyBoard', gameState.enemyBoard, false, gameState.playerTurn);
     updateStats();
 }
@@ -381,9 +402,9 @@ function handleAttack(row, col) {
 
 function computerTurn() {
     if (gameState.phase !== 'battle') return;
-    
+
     updateStatusText(t('enemyTurn'));
-    
+
     setTimeout(() => {
         let row, col;
         let validMove = false;
@@ -511,7 +532,7 @@ function updateShipLife(player, ship) {
     const prefix = player === 'player' ? 'player' : 'enemy';
     const elementId = `${prefix}-ship-${ship.size}${ship.index !== undefined ? '-' + ship.index : ''}`;
     const element = document.getElementById(elementId);
-    
+
     if (element) {
         const lives = element.querySelectorAll('.life');
         lives.forEach((life, index) => {
@@ -532,7 +553,7 @@ function resetShipLives() {
 
 function endGame(playerWon) {
     gameState.phase = 'ended';
-    
+
     if (playerWon) {
         updateStatusText(t('youWon'));
         document.getElementById('gameStatusTitle').textContent = t('victory') || '🎉 ZWYCIĘSTWO! 🎉';
@@ -543,7 +564,7 @@ function endGame(playerWon) {
         document.getElementById('gameStatusTitle').textContent = t('defeat') || '💀 PORAŻKA! 💀';
         saveGameResult(false);
     }
-    
+
     // Pokaż wszystkie statki wroga
     renderBoard('enemyBoard', gameState.enemyBoard, true, false);
     updateStats();
@@ -555,11 +576,11 @@ function newGame() {
     gameState.stats.playerMisses = 0;
     gameState.stats.enemyHits = 0;
     gameState.stats.enemyMisses = 0;
-    
+
     document.getElementById('setupControls').style.display = 'flex';
     document.getElementById('gameControls').style.display = 'none';
     document.getElementById('startBtn').disabled = true;
-    
+
     initGame();
 }
 
@@ -584,37 +605,51 @@ function saveStats() {
     // Statystyki są zapisywane w saveGameResult
 }
 
-function saveGameResult(won) {
+// ==================== ZAPISYWANIE WYNIKÓW (FIREBASE) ====================
+
+async function saveGameResult(won) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const userIndex = users.findIndex(u => u.username === currentUser.username);
-    
-    if (userIndex === -1) return;
-
-    if (!users[userIndex].stats) {
-        users[userIndex].stats = {};
-    }
-    
-    if (!users[userIndex].stats.battleship) {
-        users[userIndex].stats.battleship = {
-            wins: 0,
-            losses: 0,
-            points: 0
-        };
+    if (!currentUser || !currentUser.uid) {
+        console.log('Nie zalogowano - wynik nie zostanie zapisany');
+        return;
     }
 
-    if (won) {
-        users[userIndex].stats.battleship.wins++;
-        users[userIndex].stats.battleship.points += 20;
-    } else {
-        users[userIndex].stats.battleship.losses++;
-        users[userIndex].stats.battleship.points += 5;
-    }
+    try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userDoc = await getDoc(userRef);
 
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const stats = userData.stats || {};
+
+            if (!stats.battleship) {
+                stats.battleship = {
+                    wins: 0,
+                    losses: 0,
+                    points: 0
+                };
+            }
+
+            if (won) {
+                stats.battleship.wins++;
+                stats.battleship.points += 20;
+            } else {
+                stats.battleship.losses++;
+                stats.battleship.points += 5;
+            }
+
+            // Zapisz do Firebase
+            await updateDoc(userRef, { stats: stats });
+
+            // Aktualizuj localStorage
+            currentUser.stats = stats;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            console.log('Wynik zapisany do Firebase!');
+        }
+    } catch (error) {
+        console.error('Błąd zapisywania wyniku:', error);
+    }
 }
 
 // ==================== UI ====================
@@ -628,9 +663,19 @@ function updatePageTranslations() {
         const key = element.getAttribute('data-i18n');
         element.textContent = t(key);
     });
-    
+
     document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
         const key = element.getAttribute('data-i18n-placeholder');
         element.placeholder = t(key);
     });
 }
+
+// ==================== EXPORT FUNKCJI ====================
+
+window.selectMode = selectMode;
+window.backToModeSelection = backToModeSelection;
+window.searchPlayers = searchPlayers;
+window.selectPlayer = selectPlayer;
+window.autoSetupShips = autoSetupShips;
+window.startBattle = startBattle;
+window.newGame = newGame;
