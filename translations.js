@@ -8,7 +8,7 @@ const translations = {
         guest: 'Gość',
         login: 'Zaloguj się',
         logout: 'Wyloguj',
-        
+
         // Strona główna
         heroTitle: 'Witaj w świecie klasycznych gier!',
         heroSubtitle: 'Zagraj w legendarne gry, zdobywaj punkty i rywalizuj z przyjaciółmi',
@@ -52,7 +52,7 @@ const translations = {
         enterUsername: 'Wpisz swoją nazwę',
         enterPassword: 'Wpisz hasło',
         chooseUsername: 'Wybierz nazwę użytkownika',
-        choosePassword: 'Wybierz hasło (min. 4 znaki)',
+        choosePassword: 'Wybierz hasło (min. 6 znaków)',
         repeatPassword: 'Powtórz hasło',
         
         // Komunikaty logowania
@@ -99,11 +99,12 @@ const translations = {
         battleshipSubtitle: 'Zatop flotę przeciwnika!',
         yourFleet: '🚢 Twoja flota',
         enemyFleet: '💀 Flota wroga',
+        battleshipShip: 'Pancernik',
         cruiser: 'Krążownik',
         destroyer: 'Niszczyciel',
         submarine: 'Łódź',
         setupPhase: 'Rozmieść swoje statki!',
-        clickAutoSetup: 'Kliknij "Rozstaw automatycznie" lub ustaw ręcznie',
+        clickAutoSetup: 'Kliknij "Rozstaw automatycznie"',
         autoSetup: '🎲 Rozstaw automatycznie',
         rotate: '🔄 Obróć statek',
         startBattle: '⚔️ Rozpocznij bitwę!',
@@ -130,9 +131,24 @@ const translations = {
         youWon: '🎉 ZWYCIĘSTWO! Zatopiłeś całą flotę wroga! 🎉',
         youLost: '💀 PORAŻKA! Twoja flota została zatopiona! 💀',
         horizontal: 'Poziomo',
-        vertical: 'Pionowo'
+        vertical: 'Pionowo',
+        selectGameMode: 'Wybierz tryb gry:',
+        playVsBot: 'Gra z Botem',
+        playOnline: 'Gra Online',
+        botModeDesc: 'Zagraj przeciwko AI',
+        onlineModeDesc: 'Zagraj z innym graczem',
+        findPlayer: 'Znajdź gracza',
+        searchInfo: 'Wyszukaj zarejestrowanego gracza po nicku',
+        enterPlayerNick: 'Wpisz nick gracza...',
+        backBtn: '← Powrót',
+        opponent: 'Przeciwnik:',
+        loginRequired: 'Musisz być zalogowany aby grać online!',
+        noPlayersFound: 'Nie znaleziono graczy',
+        battleInProgress: 'Bitwa trwa!',
+        victory: '🎉 ZWYCIĘSTWO! 🎉',
+        defeat: '💀 PORAŻKA! 💀'
     },
-    
+
     // ==================== ANGIELSKI ====================
     en: {
         // Navbar
@@ -184,7 +200,7 @@ const translations = {
         enterUsername: 'Enter your username',
         enterPassword: 'Enter password',
         chooseUsername: 'Choose username',
-        choosePassword: 'Choose password (min. 4 characters)',
+        choosePassword: 'Choose password (min. 6 characters)',
         repeatPassword: 'Repeat password',
         
         // Messages
@@ -231,11 +247,12 @@ const translations = {
         battleshipSubtitle: 'Sink the enemy fleet!',
         yourFleet: '🚢 Your Fleet',
         enemyFleet: '💀 Enemy Fleet',
+        battleshipShip: 'Battleship',
         cruiser: 'Cruiser',
         destroyer: 'Destroyer',
         submarine: 'Submarine',
         setupPhase: 'Place your ships!',
-        clickAutoSetup: 'Click "Auto Setup" or place manually',
+        clickAutoSetup: 'Click "Auto Setup"',
         autoSetup: '🎲 Auto Setup',
         rotate: '🔄 Rotate Ship',
         startBattle: '⚔️ Start Battle!',
@@ -262,9 +279,24 @@ const translations = {
         youWon: '🎉 VICTORY! You sunk the entire enemy fleet! 🎉',
         youLost: '💀 DEFEAT! Your fleet has been sunk! 💀',
         horizontal: 'Horizontal',
-        vertical: 'Vertical'
+        vertical: 'Vertical',
+        selectGameMode: 'Select game mode:',
+        playVsBot: 'Play vs Bot',
+        playOnline: 'Play Online',
+        botModeDesc: 'Play against AI',
+        onlineModeDesc: 'Play with another player',
+        findPlayer: 'Find player',
+        searchInfo: 'Search for registered player by nickname',
+        enterPlayerNick: 'Enter player nickname...',
+        backBtn: '← Back',
+        opponent: 'Opponent:',
+        loginRequired: 'You must be logged in to play online!',
+        noPlayersFound: 'No players found',
+        battleInProgress: 'Battle in progress!',
+        victory: '🎉 VICTORY! 🎉',
+        defeat: '💀 DEFEAT! 💀'
     },
-    
+
     // ==================== NIEMIECKI ====================
     de: {
         // Navbar
@@ -316,7 +348,7 @@ const translations = {
         enterUsername: 'Gib deinen Benutzernamen ein',
         enterPassword: 'Gib dein Passwort ein',
         chooseUsername: 'Wähle einen Benutzernamen',
-        choosePassword: 'Wähle ein Passwort (mind. 4 Zeichen)',
+        choosePassword: 'Wähle ein Passwort (mind. 6 Zeichen)',
         repeatPassword: 'Wiederhole das Passwort',
         
         // Messages
@@ -363,11 +395,12 @@ const translations = {
         battleshipSubtitle: 'Versenke die feindliche Flotte!',
         yourFleet: '🚢 Deine Flotte',
         enemyFleet: '💀 Feindliche Flotte',
+        battleshipShip: 'Schlachtschiff',
         cruiser: 'Kreuzer',
         destroyer: 'Zerstörer',
         submarine: 'U-Boot',
         setupPhase: 'Platziere deine Schiffe!',
-        clickAutoSetup: 'Klicke "Auto-Aufstellung" oder platziere manuell',
+        clickAutoSetup: 'Klicke "Auto-Aufstellung"',
         autoSetup: '🎲 Auto-Aufstellung',
         rotate: '🔄 Schiff drehen',
         startBattle: '⚔️ Schlacht beginnen!',
@@ -394,7 +427,22 @@ const translations = {
         youWon: '🎉 SIEG! Du hast die gesamte feindliche Flotte versenkt! 🎉',
         youLost: '💀 NIEDERLAGE! Deine Flotte wurde versenkt! 💀',
         horizontal: 'Horizontal',
-        vertical: 'Vertikal'
+        vertical: 'Vertikal',
+        selectGameMode: 'Wähle Spielmodus:',
+        playVsBot: 'Gegen Bot',
+        playOnline: 'Online spielen',
+        botModeDesc: 'Spiele gegen KI',
+        onlineModeDesc: 'Spiele mit einem anderen Spieler',
+        findPlayer: 'Spieler finden',
+        searchInfo: 'Suche registrierten Spieler nach Nickname',
+        enterPlayerNick: 'Gib Spieler-Nickname ein...',
+        backBtn: '← Zurück',
+        opponent: 'Gegner:',
+        loginRequired: 'Du musst angemeldet sein um online zu spielen!',
+        noPlayersFound: 'Keine Spieler gefunden',
+        battleInProgress: 'Schlacht im Gange!',
+        victory: '🎉 SIEG! 🎉',
+        defeat: '💀 NIEDERLAGE! 💀'
     }
 };
 
@@ -410,7 +458,7 @@ function t(key) {
 function changeLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('language', lang);
-    
+
     // Aktualizuj aktywny przycisk
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -418,14 +466,11 @@ function changeLanguage(lang) {
             btn.classList.add('active');
         }
     });
-    
-    // Przeładuj tłumaczenia na stronie
-    updatePageTranslations();
-}
 
-// Funkcja aktualizująca tłumaczenia (będzie nadpisana w każdym pliku)
-function updatePageTranslations() {
-    console.log('Updating translations to:', currentLanguage);
+    // Przeładuj tłumaczenia na stronie
+    if (typeof updatePageTranslations === 'function') {
+        updatePageTranslations();
+    }
 }
 
 // Inicjalizacja przy załadowaniu
@@ -437,3 +482,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Export dla modułów
+if (typeof window !== 'undefined') {
+    window.t = t;
+    window.changeLanguage = changeLanguage;
+    window.translations = translations;
+    window.currentLanguage = currentLanguage;
+}
