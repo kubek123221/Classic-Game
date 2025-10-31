@@ -1,25 +1,26 @@
+// kolko-i-krzyzyk.js - Firebase version
+import { auth, db, doc, getDoc, updateDoc } from './firebase-config.js';
+
 // Zmienne gry
 let board = ['', '', '', '', '', '', '', '', ''];
 let currentPlayer = 'X';
 let gameActive = true;
-let gameMode = 'pvp'; // 'pvp' lub 'bot'
-let botDifficulty = 'easy'; // 'easy', 'normal', 'hard'
+let gameMode = 'pvp';
+let botDifficulty = 'easy';
 let stats = { xWins: 0, oWins: 0, draws: 0 };
 let currentGameResult = null;
 
 // Warunki wygranej
 const winConditions = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rzędy
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // kolumny
-    [0, 4, 8], [2, 4, 6]              // przekątne
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
 ];
 
-// Pobieranie elementów
 const cells = document.querySelectorAll('.cell');
 const gameInfo = document.querySelector('.game-info');
 const difficultySelector = document.getElementById('difficultySelector');
 
-// Dodawanie event listenerów do komórek
 cells.forEach(cell => {
     cell.addEventListener('click', handleCellClick);
 });
@@ -36,18 +37,17 @@ function setGameMode(mode) {
             btn.classList.add('active');
         }
     });
-    
+
     if (mode === 'bot') {
         difficultySelector.style.display = 'block';
     } else {
         difficultySelector.style.display = 'none';
     }
-    
+
     resetGame();
     updateGameInfo();
 }
 
-// Zmiana poziomu trudności
 function setDifficulty(difficulty) {
     botDifficulty = difficulty;
     
@@ -60,12 +60,11 @@ function setDifficulty(difficulty) {
             btn.classList.add('active');
         }
     });
-    
+
     resetGame();
     updateGameInfo();
 }
 
-// Aktualizacja informacji o grze
 function updateGameInfo() {
     const gameInfoText = document.getElementById('gameInfoText');
     
@@ -81,10 +80,9 @@ function updateGameInfo() {
     }
 }
 
-// Obsługa kliknięcia w komórkę
 function handleCellClick(e) {
     const index = e.target.getAttribute('data-index');
-
+    
     if (board[index] !== '' || !gameActive) {
         return;
     }
@@ -115,7 +113,6 @@ function handleCellClick(e) {
     }
 }
 
-// Wykonanie ruchu
 function makeMove(index, player) {
     board[index] = player;
     const cell = cells[index];
@@ -129,7 +126,6 @@ function makeMove(index, player) {
 
     const gameInfoText = document.getElementById('gameInfoText');
 
-    // Sprawdzenie wygranej
     if (checkWin()) {
         let winnerText;
         if (gameMode === 'bot') {
@@ -146,7 +142,6 @@ function makeMove(index, player) {
         return;
     }
 
-    // Sprawdzenie remisu
     if (board.every(cell => cell !== '')) {
         gameInfoText.textContent = t('draw');
         gameActive = false;
@@ -156,9 +151,8 @@ function makeMove(index, player) {
         return;
     }
 
-    // Zmiana gracza
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-    
+
     if (gameMode === 'bot') {
         if (currentPlayer === 'X') {
             gameInfoText.textContent = t('yourMove');
@@ -168,11 +162,9 @@ function makeMove(index, player) {
     }
 }
 
-// ============= ALGORYTMY BOTA =============
-
 function botMove() {
     let move = -1;
-    
+
     switch(botDifficulty) {
         case 'easy':
             move = botMoveEasy();
@@ -184,7 +176,7 @@ function botMove() {
             move = botMoveHard();
             break;
     }
-    
+
     if (move !== -1) {
         makeMove(move, 'O');
     }
@@ -209,7 +201,7 @@ function botMoveNormal() {
 function botMoveHard() {
     let bestScore = -Infinity;
     let bestMove = -1;
-    
+
     for (let i = 0; i < 9; i++) {
         if (board[i] === '') {
             board[i] = 'O';
@@ -222,7 +214,7 @@ function botMoveHard() {
             }
         }
     }
-    
+
     return bestMove;
 }
 
@@ -233,7 +225,7 @@ function minimax(board, depth, isMaximizing) {
         if (result === 'X') return depth - 10;
         if (result === 'draw') return 0;
     }
-    
+
     if (isMaximizing) {
         let bestScore = -Infinity;
         for (let i = 0; i < 9; i++) {
@@ -266,11 +258,11 @@ function checkWinner() {
             return board[a];
         }
     }
-    
+
     if (board.every(cell => cell !== '')) {
         return 'draw';
     }
-    
+
     return null;
 }
 
@@ -287,51 +279,58 @@ function checkWin() {
     return false;
 }
 
-// Zapisywanie wyniku gry
-function saveGameResult() {
+// Zapisywanie wyniku gry do Firebase
+async function saveGameResult() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const userIndex = users.findIndex(u => u.username === currentUser.username);
-    
-    if (userIndex === -1) return;
-
-    if (!users[userIndex].stats) {
-        users[userIndex].stats = {
-            tictactoeWins: 0,
-            tictactoePoints: 0,
-            tictactoeLosses: 0,
-            tictactoeDraws: 0
-        };
+    if (!currentUser || !currentUser.uid) {
+        console.log('Nie zalogowano - wynik nie zostanie zapisany');
+        return;
     }
 
-    if (currentGameResult === 'win') {
-        users[userIndex].stats.tictactoeWins++;
-        users[userIndex].stats.tictactoePoints += 10;
-    } else if (currentGameResult === 'loss') {
-        users[userIndex].stats.tictactoeLosses++;
-        users[userIndex].stats.tictactoePoints += 2;
-    } else if (currentGameResult === 'draw') {
-        users[userIndex].stats.tictactoeDraws++;
-        users[userIndex].stats.tictactoePoints += 5;
+    try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const stats = userData.stats || {};
+
+            // Aktualizuj statystyki
+            if (currentGameResult === 'win') {
+                stats.tictactoeWins = (stats.tictactoeWins || 0) + 1;
+                stats.tictactoePoints = (stats.tictactoePoints || 0) + 10;
+            } else if (currentGameResult === 'loss') {
+                stats.tictactoeLosses = (stats.tictactoeLosses || 0) + 1;
+                stats.tictactoePoints = (stats.tictactoePoints || 0) + 2;
+            } else if (currentGameResult === 'draw') {
+                stats.tictactoeDraws = (stats.tictactoeDraws || 0) + 1;
+                stats.tictactoePoints = (stats.tictactoePoints || 0) + 5;
+            }
+
+            // Zapisz do Firebase
+            await updateDoc(userRef, { stats: stats });
+
+            // Aktualizuj localStorage
+            currentUser.stats = stats;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            console.log('Wynik zapisany do Firebase!');
+        }
+    } catch (error) {
+        console.error('Błąd zapisywania wyniku:', error);
     }
 
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
-    
     currentGameResult = null;
 }
 
-// Reset gry
 function resetGame() {
     board = ['', '', '', '', '', '', '', '', ''];
     currentPlayer = 'X';
     gameActive = true;
     currentGameResult = null;
-    
+
     updateGameInfo();
-    
+
     cells.forEach(cell => {
         cell.textContent = '';
         cell.classList.remove('taken', 'x', 'o', 'winner');
@@ -339,30 +338,32 @@ function resetGame() {
     });
 }
 
-// Aktualizacja statystyk
 function updateStats() {
     document.getElementById('xWins').textContent = stats.xWins;
     document.getElementById('oWins').textContent = stats.oWins;
     document.getElementById('draws').textContent = stats.draws;
 }
 
-// Aktualizacja tłumaczeń
 function updatePageTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
         element.textContent = t(key);
     });
-    
+
     updateGameInfo();
 }
 
 // Inicjalizacja
 document.addEventListener('DOMContentLoaded', () => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser && currentUser.stats) {
-        console.log('Zalogowany jako:', currentUser.username);
-        console.log('Punkty:', currentUser.stats.tictactoePoints);
+    if (currentUser) {
+        document.getElementById('username-nav').textContent = currentUser.username;
     }
     updateGameInfo();
     updatePageTranslations();
 });
+
+// Export funkcji do window
+window.setGameMode = setGameMode;
+window.setDifficulty = setDifficulty;
+window.resetGame = resetGame;
