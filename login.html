@@ -35,8 +35,8 @@
             <!-- Formularz logowania -->
             <form id="loginForm" class="form active">
                 <div class="input-group">
-                    <label data-i18n="username">Nazwa użytkownika</label>
-                    <input type="text" id="loginUsername" data-i18n-placeholder="enterUsername" placeholder="Wpisz swoją nazwę" required>
+                    <label>Email</label>
+                    <input type="email" id="loginUsername" placeholder="twoj@email.com" required>
                 </div>
                 <div class="input-group">
                     <label data-i18n="password">Hasło</label>
@@ -53,8 +53,12 @@
                     <input type="text" id="registerUsername" data-i18n-placeholder="chooseUsername" placeholder="Wybierz nazwę użytkownika" required>
                 </div>
                 <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="twoj@email.com" required>
+                </div>
+                <div class="input-group">
                     <label data-i18n="password">Hasło</label>
-                    <input type="password" id="registerPassword" data-i18n-placeholder="choosePassword" placeholder="Wybierz hasło (min. 4 znaki)" required>
+                    <input type="password" id="registerPassword" data-i18n-placeholder="choosePassword" placeholder="Wybierz hasło (min. 6 znaków)" required>
                 </div>
                 <div class="input-group">
                     <label data-i18n="confirmPassword">Powtórz hasło</label>
@@ -66,7 +70,7 @@
         </div>
     </div>
 
-    <script src="translations.js"></script>
-    <script src="login.js"></script>
+    <script type="module" src="translations.js"></script>
+    <script type="module" src="login.js"></script>
 </body>
 </html>
