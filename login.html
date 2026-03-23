@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logowanie - Klasyczne Gry</title>
+    <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="style-login.css">
 </head>
 <body>
@@ -13,20 +14,19 @@
         <div class="circle circle-3"></div>
     </div>
 
-    <!-- Przełącznik języka w górnym rogu -->
     <div class="language-selector-top">
-        <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+        <button class="lang-btn" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
         <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')" title="English">🇬🇧</button>
         <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
     </div>
 
     <div class="login-container">
         <a href="index.html" class="back-btn" data-i18n="backToHome">← Powrót</a>
-        
+
         <div class="login-box">
             <h1 data-i18n="welcome">🎮 Witaj!</h1>
             <p class="subtitle" data-i18n="loginSubtitle">Zaloguj się lub utwórz nowe konto</p>
-            
+
             <div class="tabs">
                 <button class="tab active" onclick="showTab('login')" data-i18n="loginTab">Logowanie</button>
                 <button class="tab" onclick="showTab('register')" data-i18n="registerTab">Rejestracja</button>
@@ -36,11 +36,15 @@
             <form id="loginForm" class="form active">
                 <div class="input-group">
                     <label>Email</label>
-                    <input type="email" id="loginUsername" placeholder="twoj@email.com" required>
+                    <input type="email" id="loginUsername"
+                           placeholder="twoj@email.com" autocomplete="email" required>
                 </div>
                 <div class="input-group">
                     <label data-i18n="password">Hasło</label>
-                    <input type="password" id="loginPassword" data-i18n-placeholder="enterPassword" placeholder="Wpisz hasło" required>
+                    <input type="password" id="loginPassword"
+                           data-i18n-placeholder="enterPassword"
+                           placeholder="Wpisz hasło"
+                           autocomplete="current-password" required>
                 </div>
                 <button type="submit" class="submit-btn" data-i18n="loginBtn">Zaloguj się</button>
                 <p class="message" id="loginMessage"></p>
@@ -50,19 +54,32 @@
             <form id="registerForm" class="form">
                 <div class="input-group">
                     <label data-i18n="username">Nazwa użytkownika</label>
-                    <input type="text" id="registerUsername" data-i18n-placeholder="chooseUsername" placeholder="Wybierz nazwę użytkownika" required>
+                    <input type="text" id="registerUsername"
+                           data-i18n-placeholder="chooseUsername"
+                           placeholder="Wybierz nazwę użytkownika"
+                           autocomplete="username"
+                           minlength="3" maxlength="20" required>
                 </div>
                 <div class="input-group">
                     <label>Email</label>
-                    <input type="email" id="registerEmail" placeholder="twoj@email.com" required>
+                    <input type="email" id="registerEmail"
+                           placeholder="twoj@email.com"
+                           autocomplete="email" required>
                 </div>
                 <div class="input-group">
                     <label data-i18n="password">Hasło</label>
-                    <input type="password" id="registerPassword" data-i18n-placeholder="choosePassword" placeholder="Wybierz hasło (min. 6 znaków)" required>
+                    <input type="password" id="registerPassword"
+                           data-i18n-placeholder="choosePassword"
+                           placeholder="Wybierz hasło (min. 6 znaków)"
+                           autocomplete="new-password"
+                           minlength="6" required>
                 </div>
                 <div class="input-group">
                     <label data-i18n="confirmPassword">Powtórz hasło</label>
-                    <input type="password" id="registerPasswordConfirm" data-i18n-placeholder="repeatPassword" placeholder="Powtórz hasło" required>
+                    <input type="password" id="registerPasswordConfirm"
+                           data-i18n-placeholder="repeatPassword"
+                           placeholder="Powtórz hasło"
+                           autocomplete="new-password" required>
                 </div>
                 <button type="submit" class="submit-btn" data-i18n="registerBtn">Zarejestruj się</button>
                 <p class="message" id="registerMessage"></p>
