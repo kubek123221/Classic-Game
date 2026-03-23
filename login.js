@@ -1,173 +1,201 @@
-// login.js - Firebase version
-import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, doc, setDoc, getDoc } from './firebase-config.js';
+// login.js
+import {
+    auth, db,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    doc, setDoc, getDoc,
+    DEFAULT_STATS,
+    serverTimestamp
+} from './firebase-config.js';
 
-// Przełączanie między zakładkami
-function showTab(tab) {
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const tabs = document.querySelectorAll('.tab');
+// ==================== Rate limiting logowania ====================
+const loginAttempts = { count: 0, lastAttempt: 0, lockedUntil: 0 };
+const MAX_ATTEMPTS  = 5;
+const LOCK_DURATION = 60_000; // 60 s
 
-    tabs.forEach(t => t.classList.remove('active'));
+function checkRateLimit() {
+    const now = Date.now();
+    if (now < loginAttempts.lockedUntil) {
+        const remaining = Math.ceil((loginAttempts.lockedUntil - now) / 1000);
+        return { blocked: true, remaining };
+    }
+    // Resetuj licznik po 5 minutach bez prób
+    if (now - loginAttempts.lastAttempt > 300_000) {
+        loginAttempts.count = 0;
+    }
+    return { blocked: false };
+}
 
-    if (tab === 'login') {
-        loginForm.classList.add('active');
-        registerForm.classList.remove('active');
-        tabs[0].classList.add('active');
-    } else {
-        registerForm.classList.add('active');
-        loginForm.classList.remove('active');
-        tabs[1].classList.add('active');
+function recordFailedAttempt() {
+    loginAttempts.count++;
+    loginAttempts.lastAttempt = Date.now();
+    if (loginAttempts.count >= MAX_ATTEMPTS) {
+        loginAttempts.lockedUntil = Date.now() + LOCK_DURATION;
+        loginAttempts.count = 0;
     }
 }
 
-// Obsługa logowania
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
+// ==================== Walidacja ====================
+function validateUsername(username) {
+    if (username.length < 3)          return t('usernameTooShort');
+    if (!/^[\w\pL]+$/u.test(username)) return t('usernameInvalidChars');
+    return null;
+}
+
+// ==================== Helpers UI ====================
+function setMessage(elementId, text, ok) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = ok ? '#00ff88' : '#ff4444';
+}
+
+function setLoading(btn, loading) {
+    btn.disabled = loading;
+    btn.style.opacity = loading ? '0.7' : '1';
+    btn.textContent = loading
+        ? (btn.dataset.loadingText || '...')
+        : (btn.dataset.originalText || btn.textContent);
+}
+
+// ==================== Przełączanie zakładek ====================
+function showTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('loginForm').classList.toggle('active', isLogin);
+    document.getElementById('registerForm').classList.toggle('active', !isLogin);
+
+    document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', isLogin ? i === 0 : i === 1);
+    });
+
+    // Czyść komunikaty
+    setMessage('loginMessage', '');
+    setMessage('registerMessage', '');
+}
+
+// ==================== Logowanie ====================
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('loginUsername').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const messageEl = document.getElementById('loginMessage');
-
-    try {
-        // Logowanie przez Firebase
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // Pobierz dane użytkownika z Firestore
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            localStorage.setItem('currentUser', JSON.stringify({
-                uid: user.uid,
-                email: user.email,
-                username: userData.username,
-                stats: userData.stats || {
-                    tictactoeWins: 0,
-                    tictactoePoints: 0,
-                    tictactoeLosses: 0,
-                    tictactoeDraws: 0,
-                    battleship: { 
-                        wins: 0, 
-                        losses: 0,
-                        points: 0 
-                    }
-                }
-            }));
-
-            messageEl.textContent = t('loginSuccess');
-            messageEl.style.color = '#00ff88';
-            
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-            messageEl.textContent = t('loginError');
-        } else if (error.code === 'auth/invalid-email') {
-            messageEl.textContent = 'Nieprawidłowy format email!';
-        } else if (error.code === 'auth/invalid-credential') {
-            messageEl.textContent = 'Nieprawidłowy email lub hasło!';
-        } else {
-            messageEl.textContent = 'Błąd logowania: ' + error.message;
-        }
-        messageEl.style.color = '#ff4444';
-    }
-});
-
-// Obsługa rejestracji
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const username = document.getElementById('registerUsername').value.trim();
-    const email = document.getElementById('registerEmail').value.trim();
-    const password = document.getElementById('registerPassword').value;
-    const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
-    const messageEl = document.getElementById('registerMessage');
-
-    if (username.length < 3) {
-        messageEl.textContent = t('usernameTooShort');
-        messageEl.style.color = '#ff4444';
+    const rate = checkRateLimit();
+    if (rate.blocked) {
+        setMessage('loginMessage', `${t('loginTooManyAttempts')} (${rate.remaining}s)`, false);
         return;
     }
 
+    const email    = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn      = e.target.querySelector('.submit-btn');
+
+    btn.dataset.originalText = t('loginBtn');
+    btn.dataset.loadingText  = '⏳';
+    setLoading(btn, true);
+    setMessage('loginMessage', '');
+
+    try {
+        const cred     = await signInWithEmailAndPassword(auth, email, password);
+        const userSnap = await getDoc(doc(db, "users", cred.user.uid));
+
+        if (!userSnap.exists()) throw new Error('user-doc-missing');
+
+        const data = userSnap.data();
+        localStorage.setItem('currentUser', JSON.stringify({
+            uid:      cred.user.uid,
+            email:    cred.user.email,
+            username: data.username,
+            stats:    data.stats || DEFAULT_STATS
+        }));
+
+        setMessage('loginMessage', t('loginSuccess'), true);
+        loginAttempts.count = 0;
+
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+
+    } catch (err) {
+        recordFailedAttempt();
+        console.error('Login error:', err.code || err.message);
+
+        const msg = {
+            'auth/wrong-password':    t('loginError'),
+            'auth/user-not-found':    t('loginError'),
+            'auth/invalid-credential':t('loginError'),
+            'auth/invalid-email':     t('invalidEmail'),
+            'auth/too-many-requests': t('loginTooManyAttempts'),
+        }[err.code] ?? t('loginError');
+
+        setMessage('loginMessage', msg, false);
+        setLoading(btn, false);
+    }
+});
+
+// ==================== Rejestracja ====================
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const username        = document.getElementById('registerUsername').value.trim();
+    const email           = document.getElementById('registerEmail').value.trim();
+    const password        = document.getElementById('registerPassword').value;
+    const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+    const btn             = e.target.querySelector('.submit-btn');
+
+    // Walidacja front-end
+    const usernameError = validateUsername(username);
+    if (usernameError) { setMessage('registerMessage', usernameError, false); return; }
+
     if (password.length < 6) {
-        messageEl.textContent = 'Hasło musi mieć min. 6 znaków!';
-        messageEl.style.color = '#ff4444';
+        setMessage('registerMessage', t('passwordTooShort'), false);
         return;
     }
 
     if (password !== passwordConfirm) {
-        messageEl.textContent = t('passwordMismatch');
-        messageEl.style.color = '#ff4444';
+        setMessage('registerMessage', t('passwordMismatch'), false);
         return;
     }
 
-    try {
-        // Rejestracja przez Firebase
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+    btn.dataset.originalText = t('registerBtn');
+    btn.dataset.loadingText  = '⏳';
+    setLoading(btn, true);
+    setMessage('registerMessage', '');
 
-        // Zapisz dodatkowe dane w Firestore
-        await setDoc(doc(db, "users", user.uid), {
-            username: username,
-            email: email,
-            stats: {
-                tictactoeWins: 0,
-                tictactoePoints: 0,
-                tictactoeLosses: 0,
-                tictactoeDraws: 0,
-                battleship: {
-                    wins: 0,
-                    losses: 0,
-                    points: 0
-                }
-            },
-            createdAt: new Date().toISOString()
+    try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+        await setDoc(doc(db, "users", cred.user.uid), {
+            username,
+            email,
+            stats:     DEFAULT_STATS,
+            createdAt: serverTimestamp()
         });
 
-        messageEl.textContent = t('registerSuccess');
-        messageEl.style.color = '#00ff88';
+        setMessage('registerMessage', t('registerSuccess'), true);
+        e.target.reset();
+        setTimeout(() => showTab('login'), 1800);
 
-        document.getElementById('registerForm').reset();
+    } catch (err) {
+        console.error('Register error:', err.code || err.message);
 
-        setTimeout(() => {
-            showTab('login');
-        }, 2000);
-    } catch (error) {
-        console.error('Registration error:', error);
-        if (error.code === 'auth/email-already-in-use') {
-            messageEl.textContent = 'Ten email jest już zarejestrowany!';
-        } else if (error.code === 'auth/invalid-email') {
-            messageEl.textContent = 'Nieprawidłowy format email!';
-        } else if (error.code === 'auth/weak-password') {
-            messageEl.textContent = 'Hasło jest za słabe!';
-        } else {
-            messageEl.textContent = 'Błąd rejestracji: ' + error.message;
-        }
-        messageEl.style.color = '#ff4444';
+        const msg = {
+            'auth/email-already-in-use': t('emailAlreadyUsed'),
+            'auth/invalid-email':        t('invalidEmail'),
+            'auth/weak-password':        t('weakPassword'),
+        }[err.code] ?? `Błąd: ${err.message}`;
+
+        setMessage('registerMessage', msg, false);
+        setLoading(btn, false);
     }
 });
 
-// Aktualizacja tłumaczeń
+// ==================== Tłumaczenia ====================
 function updatePageTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-        const key = element.getAttribute('data-i18n');
-        element.textContent = t(key);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.getAttribute('data-i18n'));
     });
-
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-        const key = element.getAttribute('data-i18n-placeholder');
-        element.placeholder = t(key);
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
     });
 }
 
-// Inicjalizacja
-document.addEventListener('DOMContentLoaded', () => {
-    updatePageTranslations();
-});
+document.addEventListener('DOMContentLoaded', updatePageTranslations);
 
-// Export funkcji
-window.showTab = showTab;
+window.showTab               = showTab;
+window.updatePageTranslations = updatePageTranslations;
