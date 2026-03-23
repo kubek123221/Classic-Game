@@ -1,163 +1,138 @@
 // home.js
-import {
-    auth, db,
-    signOut,
-    onAuthStateChanged,
-    collection, getDocs,
-    doc, getDoc
-} from './firebase-config.js';
+import { auth, db, signOut, onAuthStateChanged, collection, getDocs, doc, getDoc } from './firebase-config.js';
 
-// ==================== Pomocnik DOM ====================
-function el(id) { return document.getElementById(id); }
-
-function safeSetText(id, value) {
-    const node = el(id);
-    if (node) node.textContent = value;
+function safeT(key) {
+    return typeof t === 'function' ? t(key) : key;
 }
 
-// ==================== Auth ====================
 onAuthStateChanged(auth, async (user) => {
+    const usernameEl = document.getElementById('username');
+    const loginBtn = document.getElementById('loginBtn');
+
     if (user) {
         try {
-            const snap = await getDoc(doc(db, "users", user.uid));
-            if (snap.exists()) {
-                const data = snap.data();
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
                 const currentUser = {
-                    uid:      user.uid,
-                    email:    user.email,
-                    username: data.username,
-                    stats:    data.stats
+                    uid: user.uid,
+                    email: user.email,
+                    username: userData.username,
+                    stats: userData.stats || {}
                 };
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-                safeSetText('username', data.username);
-
-                const loginBtn = el('loginBtn');
+                if (usernameEl) usernameEl.textContent = userData.username;
                 if (loginBtn) {
-                    loginBtn.textContent = t('logout');
+                    loginBtn.textContent = safeT('logout');
                     loginBtn.onclick = logout;
                 }
-
                 loadUserStats(currentUser);
             }
-        } catch (err) {
-            console.error('Błąd pobierania danych użytkownika:', err);
+        } catch (error) {
+            console.error('Error loading user data:', error);
         }
     } else {
         localStorage.removeItem('currentUser');
-        safeSetText('username', t('guest'));
-
-        const loginBtn = el('loginBtn');
+        if (usernameEl) usernameEl.textContent = safeT('guest');
         if (loginBtn) {
-            loginBtn.textContent = t('login');
-            loginBtn.onclick = () => { window.location.href = 'login.html'; };
+            loginBtn.textContent = safeT('login');
+            loginBtn.onclick = () => window.location.href = 'login.html';
         }
-
         resetStats();
     }
 });
-
-function resetStats() {
-    ['tictactoe-wins', 'tictactoe-points', 'battleship-wins', 'battleship-points']
-        .forEach(id => safeSetText(id, 0));
-}
 
 async function logout() {
     try {
         await signOut(auth);
         localStorage.removeItem('currentUser');
         window.location.reload();
-    } catch (err) {
-        console.error('Błąd wylogowania:', err);
+    } catch (error) {
+        console.error('Logout error:', error);
     }
 }
 
-// ==================== Statystyki ====================
-function loadUserStats(user) {
-    const stats = user.stats || {};
-
-    safeSetText('tictactoe-wins',   stats.tictactoeWins   || 0);
-    safeSetText('tictactoe-points', stats.tictactoePoints || 0);
-
-    const bs = stats.battleship || {};
-    safeSetText('battleship-wins',   bs.wins   || 0);
-    safeSetText('battleship-points', bs.points || 0);
+function resetStats() {
+    const ids = ['tictactoe-wins', 'tictactoe-points', 'battleship-wins', 'battleship-points'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '0';
+    });
 }
 
-// ==================== Ranking ====================
-async function loadLeaderboard() {
-    const container = el('leaderboard');
-    if (!container) return;
+function loadUserStats(user) {
+    const stats = user.stats || {};
+    const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val || 0;
+    };
+    set('tictactoe-wins', stats.tictactoeWins);
+    set('tictactoe-points', stats.tictactoePoints);
+    set('battleship-wins', stats.battleship?.wins);
+    set('battleship-points', stats.battleship?.points);
+}
 
-    container.innerHTML = `<p class="leaderboard-loading">${t('loadingLeaderboard') || 'Ładowanie...'}</p>`;
+async function loadLeaderboard() {
+    const leaderboardDiv = document.getElementById('leaderboard');
+    if (!leaderboardDiv) return;
+    leaderboardDiv.innerHTML = '<p class="loading-text">⏳ Ładowanie rankingu...</p>';
 
     try {
-        const snap  = await getDocs(collection(db, "users"));
+        const snapshot = await getDocs(collection(db, "users"));
         const users = [];
 
-        snap.forEach(docSnap => {
-            const d     = docSnap.data();
-            const total = (d.stats?.tictactoePoints || 0) + (d.stats?.battleship?.points || 0);
-            users.push({ username: d.username, totalPoints: total });
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const tPoints = data.stats?.tictactoePoints || 0;
+            const bPoints = data.stats?.battleship?.points || 0;
+            users.push({
+                username: data.username,
+                totalPoints: tPoints + bPoints,
+                tictactoeWins: data.stats?.tictactoeWins || 0,
+                battleshipWins: data.stats?.battleship?.wins || 0
+            });
         });
 
         users.sort((a, b) => b.totalPoints - a.totalPoints);
-        container.innerHTML = '';
+        leaderboardDiv.innerHTML = '';
 
         if (users.length === 0) {
-            container.innerHTML = `<p class="leaderboard-empty">${t('noPlayers')}</p>`;
+            leaderboardDiv.innerHTML = `<p class="empty-text">${safeT('noPlayers')}</p>`;
             return;
         }
 
-        users.slice(0, 10).forEach((u, i) => {
+        users.slice(0, 10).forEach((user, index) => {
+            const medals = ['🥇', '🥈', '🥉'];
+            const medal = medals[index] || `${index + 1}`;
             const item = document.createElement('div');
             item.className = 'leaderboard-item';
-            // Klasa medalu dla top 3
-            if (i < 3) item.classList.add(`rank-${i + 1}`);
+            item.style.animationDelay = `${index * 0.05}s`;
             item.innerHTML = `
-                <span class="rank">${i + 1}</span>
-                <span class="player-name">${escapeHTML(u.username)}</span>
-                <span class="player-points">${u.totalPoints} ${t('points')}</span>
+                <span class="rank">${medal}</span>
+                <span class="player-name">${user.username}</span>
+                <div class="player-meta">
+                    <span class="game-wins">⭕ ${user.tictactoeWins} | 🚢 ${user.battleshipWins}</span>
+                    <span class="player-points">${user.totalPoints} ${safeT('points')}</span>
+                </div>
             `;
-            container.appendChild(item);
+            leaderboardDiv.appendChild(item);
         });
-
-    } catch (err) {
-        console.error('Błąd rankingu:', err);
-        container.innerHTML = '<p class="leaderboard-error">⚠️ Błąd ładowania rankingu</p>';
+    } catch (error) {
+        console.error('Error loading leaderboard:', error);
+        leaderboardDiv.innerHTML = '<p class="error-text">❌ Błąd ładowania rankingu</p>';
     }
 }
 
-// Sanityzacja — zapobiegamy XSS w nazwie użytkownika
-function escapeHTML(str) {
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-}
-
-// ==================== Tłumaczenia ====================
 function updatePageTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
-        el.textContent = t(el.getAttribute('data-i18n'));
+        const key = el.getAttribute('data-i18n');
+        el.textContent = safeT(key);
     });
-
-    // Odśwież tekst przycisku logowania
-    const loginBtn    = document.getElementById('loginBtn');
-    const currentUser = localStorage.getItem('currentUser');
-    if (loginBtn) {
-        loginBtn.textContent = currentUser ? t('logout') : t('login');
-    }
-
     loadLeaderboard();
 }
-
-// ==================== Init ====================
-document.addEventListener('DOMContentLoaded', () => {
-    loadLeaderboard();
-    updatePageTranslations();
-});
 
 window.updatePageTranslations = updatePageTranslations;
 
+document.addEventListener('DOMContentLoaded', () => {
+    loadLeaderboard();
+});
