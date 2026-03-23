@@ -1,214 +1,42 @@
-/* style-login.css - KOMPLETNY */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* style-login.css – style specyficzne dla strony logowania */
+/* Wspólne style → base.css */
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #0f0f1e;
-    color: white;
-    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: linear-gradient(135deg, #1e1e3f 0%, #0f0f1e 100%);
-    overflow: hidden;
-}
-
-.circle {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(102, 126, 234, 0.3), transparent);
-    animation: float 20s infinite ease-in-out;
-}
-
-.circle-1 {
-    width: 300px;
-    height: 300px;
-    top: 10%;
-    left: 10%;
-    animation-delay: 0s;
-}
-
-.circle-2 {
-    width: 400px;
-    height: 400px;
-    top: 50%;
-    right: 10%;
-    animation-delay: 5s;
-}
-
-.circle-3 {
-    width: 250px;
-    height: 250px;
-    bottom: 10%;
-    left: 50%;
-    animation-delay: 10s;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-    }
-    33% {
-        transform: translate(50px, -50px) scale(1.1);
-    }
-    66% {
-        transform: translate(-50px, 50px) scale(0.9);
-    }
-}
-
-/* ==================== Navbar ==================== */
-.navbar {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    padding: 20px 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-size: 1.5em;
-    font-weight: bold;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.username {
-    color: #fff;
-    font-weight: 600;
-}
-
-/* ==================== Przełącznik języków w górnym rogu ==================== */
-.language-selector-top {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    display: flex;
-    gap: 8px;
-    padding: 8px;
-    background: rgba(30, 30, 60, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    border: 2px solid rgba(102, 126, 234, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.lang-btn {
-    width: 45px;
-    height: 45px;
-    border: 2px solid transparent;
-    background: rgba(255, 255, 255, 0.05);
-    font-size: 1.5em;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.lang-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(102, 126, 234, 0.5);
-    transform: scale(1.1);
-}
-
-.lang-btn.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-color: rgba(102, 126, 234, 0.8);
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
-    transform: scale(1.05);
-}
-
-.lang-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 3px;
-    background: #00ff88;
-    border-radius: 2px;
-}
-
+/* ==================== Container ==================== */
 .login-container {
     width: 100%;
-    max-width: 450px;
+    max-width: 460px;
     padding: 20px;
     position: relative;
     z-index: 1;
-    margin-top: 80px;
+    margin-top: 20px;
 }
 
-.back-btn {
-    display: inline-block;
-    color: #667eea;
-    text-decoration: none;
-    margin-bottom: 20px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.back-btn:hover {
-    transform: translateX(-5px);
-}
-
+/* ==================== Box ==================== */
 .login-box {
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 22px;
     padding: 40px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    animation: slideUp 0.5s ease both;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .login-box h1 {
     text-align: center;
-    font-size: 2.5em;
-    margin-bottom: 10px;
+    font-size: 2.4em;
+    margin-bottom: 8px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -218,13 +46,15 @@ body {
 .subtitle {
     text-align: center;
     color: #aaa;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
+    font-size: 0.95em;
 }
 
+/* ==================== Zakładki ==================== */
 .tabs {
     display: flex;
     gap: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .tab {
@@ -236,7 +66,8 @@ body {
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.3s ease;
+    font-size: 0.95em;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
 .tab.active {
@@ -245,100 +76,77 @@ body {
     border-color: transparent;
 }
 
-.form {
-    display: none;
-}
+/* ==================== Formularze ==================== */
+.form         { display: none; }
+.form.active  { display: block; }
 
-.form.active {
-    display: block;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
+.input-group { margin-bottom: 18px; }
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
     color: #ccc;
     font-weight: 600;
+    font-size: 0.9em;
 }
 
 .input-group input {
     width: 100%;
-    padding: 15px;
+    padding: 14px 16px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
     color: white;
     font-size: 1em;
-    transition: all 0.3s ease;
+    transition: border-color 0.25s ease, background 0.25s ease;
 }
 
 .input-group input:focus {
     outline: none;
     border-color: #667eea;
     background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
+.input-group input::placeholder { color: #555; }
+
+/* ==================== Przyciski ==================== */
 .submit-btn {
     width: 100%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     padding: 15px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 1.1em;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.05em;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    letter-spacing: 0.3px;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 10px 28px rgba(102, 126, 234, 0.4);
 }
 
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ==================== Komunikaty ==================== */
 .message {
-    margin-top: 15px;
+    margin-top: 14px;
     text-align: center;
     font-weight: 600;
-    min-height: 20px;
+    font-size: 0.95em;
+    min-height: 22px;
+    transition: color 0.2s ease;
 }
 
-@media (max-width: 768px) {
-    .nav-content {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .nav-right {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-    
-    .user-info {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .language-selector {
-        justify-content: center;
-    }
-}
-
+/* ==================== Responsywność ==================== */
 @media (max-width: 500px) {
-    .login-box {
-        padding: 30px 20px;
-    }
-    
-    .login-box h1 {
-        font-size: 2em;
-    }
-}
-
-::selection {
-    background: rgba(102, 126, 234, 0.3);
-    color: white;
+    .login-box { padding: 28px 18px; }
+    .login-box h1 { font-size: 2em; }
 }
