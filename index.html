@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Klasyczne Gry - Strona Główna</title>
+    <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="style-home.css">
 </head>
 <body>
@@ -19,11 +20,11 @@
             <div class="nav-right">
                 <div class="user-info">
                     <span class="username" id="username" data-i18n="guest">Gość</span>
-                    <button class="nav-btn" onclick="window.location.href='login.html'" id="loginBtn" data-i18n="login">Zaloguj się</button>
+                    <button class="nav-btn" onclick="window.location.href='login.html'"
+                            id="loginBtn" data-i18n="login">Zaloguj się</button>
                 </div>
-                <!-- Przełącznik języka w navbarze -->
                 <div class="language-selector">
-                    <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+                    <button class="lang-btn" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
                     <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')" title="English">🇬🇧</button>
                     <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
                 </div>
@@ -33,7 +34,9 @@
 
     <div class="hero">
         <h1 class="hero-title" data-i18n="heroTitle">Witaj w świecie klasycznych gier!</h1>
-        <p class="hero-subtitle" data-i18n="heroSubtitle">Zagraj w legendarne gry, zdobywaj punkty i rywalizuj z przyjaciółmi</p>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">
+            Zagraj w legendarne gry, zdobywaj punkty i rywalizuj z przyjaciółmi
+        </p>
     </div>
 
     <div class="container">
@@ -64,7 +67,7 @@
                 <button class="play-btn" data-i18n="playNow">Zagraj teraz →</button>
             </div>
 
-            <!-- Wisielec - Wkrótce -->
+            <!-- Wisielec – wkrótce -->
             <div class="game-card coming-soon">
                 <div class="game-badge soon" data-i18n="comingSoon">Wkrótce</div>
                 <div class="game-icon">🎯</div>
@@ -80,9 +83,7 @@
 
         <div class="leaderboard">
             <h2 data-i18n="leaderboard">🏆 Ranking Graczy</h2>
-            <div class="leaderboard-list" id="leaderboard">
-                <!-- Ranking będzie wczytany dynamicznie -->
-            </div>
+            <div class="leaderboard-list" id="leaderboard"></div>
         </div>
     </div>
 
