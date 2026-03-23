@@ -1,171 +1,14 @@
-/* style-home.css - KOMPLETNY */
+/* style-home.css – style specyficzne dla strony głównej */
+/* Wspólne style → base.css */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #0f0f1e;
-    color: white;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-/* ==================== Animowane tło ==================== */
-.background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: linear-gradient(135deg, #1e1e3f 0%, #0f0f1e 100%);
-    overflow: hidden;
-}
-
-.circle {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(102, 126, 234, 0.3), transparent);
-    animation: float 20s infinite ease-in-out;
-}
-
-.circle-1 {
-    width: 300px;
-    height: 300px;
-    top: 10%;
-    left: 10%;
-    animation-delay: 0s;
-}
-
-.circle-2 {
-    width: 400px;
-    height: 400px;
-    top: 50%;
-    right: 10%;
-    animation-delay: 5s;
-}
-
-.circle-3 {
-    width: 250px;
-    height: 250px;
-    bottom: 10%;
-    left: 50%;
-    animation-delay: 10s;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-    }
-    33% {
-        transform: translate(50px, -50px) scale(1.1);
-    }
-    66% {
-        transform: translate(-50px, 50px) scale(0.9);
-    }
-}
-
-/* ==================== Navbar ==================== */
-.navbar {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    padding: 20px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-content {
+/* ==================== Container ==================== */
+.container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 40px 20px;
 }
 
-.logo {
-    font-size: 1.5em;
-    font-weight: bold;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.username {
-    color: #fff;
-    font-weight: 600;
-}
-
-.nav-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.nav-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-}
-
-/* Przełącznik języków w navbarze */
-.language-selector {
-    display: flex;
-    gap: 6px;
-    padding: 6px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.lang-btn {
-    width: 40px;
-    height: 40px;
-    border: 2px solid transparent;
-    background: transparent;
-    font-size: 1.3em;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.lang-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: scale(1.1);
-}
-
-.lang-btn.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
-}
-
-/* ==================== Hero Section ==================== */
+/* ==================== Hero ==================== */
 .hero {
     text-align: center;
     padding: 80px 20px 40px;
@@ -180,37 +23,24 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: fadeInUp 1s ease;
+    animation: fadeInUp 0.9s ease both;
 }
 
 .hero-subtitle {
     font-size: 1.3em;
     color: #aaa;
-    animation: fadeInUp 1s ease 0.2s both;
+    animation: fadeInUp 0.9s ease 0.15s both;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ==================== Container ==================== */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-/* ==================== Games Grid ==================== */
+/* ==================== Karty gier ==================== */
 .games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
     margin-bottom: 60px;
 }
@@ -222,7 +52,7 @@ body {
     border-radius: 20px;
     padding: 30px;
     text-align: center;
-    transition: all 0.4s ease;
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -231,18 +61,13 @@ body {
 .game-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    inset: 0;
+    background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
     opacity: 0;
     transition: opacity 0.4s ease;
 }
 
-.game-card:hover::before {
-    opacity: 1;
-}
+.game-card:hover::before  { opacity: 1; }
 
 .game-card.available:hover {
     transform: translateY(-10px);
@@ -261,80 +86,65 @@ body {
     right: 15px;
     background: #00ff88;
     color: #0f0f1e;
-    padding: 5px 15px;
+    padding: 5px 14px;
     border-radius: 15px;
     font-size: 0.8em;
     font-weight: bold;
     z-index: 1;
 }
 
-.game-badge.soon {
-    background: #ffa500;
-}
+.game-badge.soon { background: #ffa500; }
 
 .game-icon {
-    font-size: 5em;
+    font-size: 4.5em;
     margin: 20px 0;
-    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.3));
 }
 
-.game-card h2 {
-    color: #fff;
-    font-size: 1.8em;
-    margin-bottom: 15px;
-}
-
-.game-card p {
-    color: #aaa;
-    font-size: 1em;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
+.game-card h2 { color: #fff; font-size: 1.7em; margin-bottom: 12px; }
+.game-card p  { color: #aaa; font-size: 0.95em; line-height: 1.6; margin-bottom: 18px; }
 
 .game-stats {
     display: flex;
     justify-content: space-around;
-    margin: 20px 0;
-    padding: 15px;
+    margin: 18px 0;
+    padding: 12px;
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
 
-.game-stats span {
-    color: #ccc;
-    font-size: 0.9em;
-}
+.game-stats span { color: #ccc; font-size: 0.9em; }
 
 .play-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    padding: 15px 30px;
+    padding: 14px 28px;
     border-radius: 25px;
     font-weight: 600;
     font-size: 1em;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
     position: relative;
     z-index: 1;
 }
 
 .play-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    transform: scale(1.04);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
 }
 
 .soon-overlay {
-    margin-top: 15px;
-    padding: 15px;
-    background: rgba(255, 165, 0, 0.2);
+    margin-top: 14px;
+    padding: 14px;
+    background: rgba(255, 165, 0, 0.15);
     border-radius: 10px;
     color: #ffa500;
     font-weight: bold;
 }
 
-/* ==================== Leaderboard ==================== */
+/* ==================== Ranking ==================== */
 .leaderboard {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
@@ -345,150 +155,70 @@ body {
 
 .leaderboard h2 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
     font-size: 2em;
 }
 
-.leaderboard-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+.leaderboard-list { display: flex; flex-direction: column; gap: 12px; }
 
 .leaderboard-item {
     display: flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.03);
-    padding: 15px 20px;
-    border-radius: 15px;
-    transition: all 0.3s ease;
+    padding: 14px 20px;
+    border-radius: 14px;
+    transition: background 0.25s ease, transform 0.25s ease;
 }
 
 .leaderboard-item:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.07);
     transform: translateX(5px);
 }
 
-.leaderboard-item:nth-child(1) .rank {
-    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-    color: #0f0f1e;
-}
-
-.leaderboard-item:nth-child(2) .rank {
-    background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
-    color: #0f0f1e;
-}
-
-.leaderboard-item:nth-child(3) .rank {
-    background: linear-gradient(135deg, #cd7f32 0%, #e69859 100%);
-    color: #0f0f1e;
-}
+/* Medale top 3 */
+.leaderboard-item.rank-1 .rank { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #0f0f1e; }
+.leaderboard-item.rank-2 .rank { background: linear-gradient(135deg, #c0c0c0, #e8e8e8); color: #0f0f1e; }
+.leaderboard-item.rank-3 .rank { background: linear-gradient(135deg, #cd7f32, #e69859); color: #0f0f1e; }
 
 .rank {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    margin-right: 20px;
+    margin-right: 18px;
     flex-shrink: 0;
+    font-size: 0.95em;
 }
 
-.player-name {
-    flex: 1;
-    font-weight: 600;
-}
+.player-name   { flex: 1; font-weight: 600; }
+.player-points { color: #00ff88; font-weight: bold; }
 
-.player-points {
-    color: #00ff88;
-    font-weight: bold;
-}
+.leaderboard-loading,
+.leaderboard-empty   { text-align: center; color: #888; padding: 20px; }
+.leaderboard-error   { text-align: center; color: #ff4444; padding: 20px; }
 
 /* ==================== Footer ==================== */
 footer {
     text-align: center;
-    padding: 30px 20px;
-    color: #666;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 28px 20px;
+    color: #555;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.9em;
 }
 
 /* ==================== Responsywność ==================== */
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.5em;
-    }
-
-    .games-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .nav-content {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .nav-right {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-    
-    .user-info {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .language-selector {
-        justify-content: center;
-    }
+    .hero-title  { font-size: 2.4em; }
+    .games-grid  { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-    .hero-title {
-        font-size: 2em;
-    }
-
-    .hero-subtitle {
-        font-size: 1em;
-    }
-
-    .game-icon {
-        font-size: 3.5em;
-    }
-
-    .game-card h2 {
-        font-size: 1.5em;
-    }
-    
-    .lang-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 1.1em;
-    }
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: #0f0f1e;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-}
-
-::selection {
-    background: rgba(102, 126, 234, 0.3);
-    color: white;
+    .hero-title    { font-size: 1.9em; }
+    .hero-subtitle { font-size: 1em; }
+    .game-icon     { font-size: 3.5em; }
+    .game-card h2  { font-size: 1.4em; }
 }
