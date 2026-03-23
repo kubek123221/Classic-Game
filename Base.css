@@ -1,0 +1,315 @@
+/* base.css - Wspólne style dla wszystkich stron */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0f0f1e;
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ==================== Animowane tło ==================== */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, #1e1e3f 0%, #0f0f1e 100%);
+    overflow: hidden;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.3), transparent);
+    animation: float 20s infinite ease-in-out;
+}
+
+.circle-1 { width: 300px; height: 300px; top: 10%;    left: 10%;  animation-delay: 0s;  }
+.circle-2 { width: 400px; height: 400px; top: 50%;    right: 10%; animation-delay: 5s;  }
+.circle-3 { width: 250px; height: 250px; bottom: 10%; left: 50%;  animation-delay: 10s; }
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(50px, -50px) scale(1.1); }
+    66%       { transform: translate(-50px, 50px) scale(0.9); }
+}
+
+/* ==================== Navbar ==================== */
+.navbar {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    cursor: default;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.username {
+    color: #fff;
+    font-weight: 600;
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* ==================== Przełącznik języków – navbar ==================== */
+.language-selector {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==================== Przełącznik języków – fixed (login/statki) ==================== */
+.language-selector-top {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(30, 30, 60, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.lang-btn {
+    width: 42px;
+    height: 42px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 1.4em;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: scale(1.1);
+}
+
+.lang-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: rgba(102, 126, 234, 0.8);
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+/* ==================== Przycisk powrotu ==================== */
+.back-btn {
+    display: inline-block;
+    color: #667eea;
+    text-decoration: none;
+    margin-bottom: 30px;
+    font-weight: 600;
+    font-size: 1.05em;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.back-btn:hover {
+    transform: translateX(-5px);
+    background: rgba(102, 126, 234, 0.2);
+}
+
+/* ==================== Tytuły ==================== */
+h1 {
+    text-align: center;
+    font-size: 3em;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    color: #aaa;
+    font-size: 1.2em;
+    margin-bottom: 40px;
+}
+
+/* ==================== Statystyki (wspólne) ==================== */
+.stat {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    color: #aaa;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+/* ==================== Toast powiadomienia ==================== */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(30, 30, 60, 0.95);
+    border: 1px solid rgba(102, 126, 234, 0.4);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1em;
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    text-align: center;
+    max-width: 90vw;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.success { border-color: rgba(0, 255, 136, 0.5); }
+.toast.error   { border-color: rgba(255, 68, 68, 0.5);  }
+.toast.info    { border-color: rgba(102, 126, 234, 0.5); }
+
+/* ==================== Scrollbar ==================== */
+::-webkit-scrollbar       { width: 10px; }
+::-webkit-scrollbar-track { background: #0f0f1e; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+::selection {
+    background: rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+/* ==================== Responsywność – navbar ==================== */
+@media (max-width: 768px) {
+    .nav-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-right {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .user-info {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .language-selector {
+        justify-content: center;
+    }
+
+    h1 {
+        font-size: 2.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .lang-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1em;
+    }
+}
+
