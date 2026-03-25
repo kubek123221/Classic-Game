@@ -1,37 +1,28 @@
-// translations.js - System tłumaczeń (poprawiony)
+// translations.js - Ulepszony system tłumaczeń
 
 const translations = {
-    // ==================== POLSKI ====================
     pl: {
         logo: '🎮 Klasyczne Gry',
         guest: 'Gość',
         login: 'Zaloguj się',
         logout: 'Wyloguj',
-
         heroTitle: 'Witaj w świecie klasycznych gier!',
         heroSubtitle: 'Zagraj w legendarne gry, zdobywaj punkty i rywalizuj z przyjaciółmi',
-
         available: 'Dostępne',
         comingSoon: 'Wkrótce',
         playNow: 'Zagraj teraz →',
         soonText: 'Już niedługo!',
         wins: 'wygranych',
         points: 'pkt',
-
         tictactoe: 'Kółko i Krzyżyk',
         tictactoeDesc: 'Klasyczna gra strategiczna. Ułóż trzy symbole w rzędzie i wygraj!',
         hangman: 'Wisielec',
         hangmanDesc: 'Odgadnij hasło zanim skończą się próby. Sprawdź swoją wiedzę!',
         battleship: 'Statki',
         battleshipDesc: 'Strategiczna bitwa morska. Zatop flotę przeciwnika!',
-
         leaderboard: '🏆 Ranking Graczy',
         noPlayers: 'Brak graczy w rankingu',
-        loadingLeaderboard: 'Ładowanie rankingu...',
-
         footer: '© 2025 Klasyczne Gry | Stworzone z ❤️ dla miłośników retro gier',
-
-        // Login
         welcome: '🎮 Witaj!',
         loginSubtitle: 'Zaloguj się lub utwórz nowe konto',
         loginTab: 'Logowanie',
@@ -42,26 +33,18 @@ const translations = {
         loginBtn: 'Zaloguj się',
         registerBtn: 'Zarejestruj się',
         backToHome: '← Powrót',
-
+        enterUsername: 'Wpisz swoją nazwę',
         enterPassword: 'Wpisz hasło',
         chooseUsername: 'Wybierz nazwę użytkownika',
         choosePassword: 'Wybierz hasło (min. 6 znaków)',
         repeatPassword: 'Powtórz hasło',
-
         loginSuccess: '✅ Logowanie udane! Przekierowanie...',
-        loginError: 'Błędny email lub hasło!',
-        loginTooManyAttempts: 'Zbyt wiele prób. Spróbuj za chwilę.',
+        loginError: '❌ Błędny email lub hasło!',
         registerSuccess: '✅ Rejestracja udana! Możesz się zalogować.',
-        usernameTooShort: 'Nazwa użytkownika musi mieć min. 3 znaki!',
-        usernameInvalidChars: 'Nazwa użytkownika może zawierać tylko litery, cyfry i _',
-        passwordTooShort: 'Hasło musi mieć min. 6 znaków!',
-        passwordMismatch: 'Hasła nie są identyczne!',
-        emailAlreadyUsed: 'Ten email jest już zarejestrowany!',
-        invalidEmail: 'Nieprawidłowy format email!',
-        weakPassword: 'Hasło jest za słabe!',
-        loginRequired: 'Musisz być zalogowany aby grać online!',
-
-        // Kółko i Krzyżyk
+        usernameTooShort: '❌ Nazwa użytkownika musi mieć min. 3 znaki!',
+        passwordTooShort: '❌ Hasło musi mieć min. 6 znaków!',
+        passwordMismatch: '❌ Hasła nie są identyczne!',
+        usernameTaken: '❌ Ta nazwa użytkownika jest już zajęta!',
         tictactoeTitle: '⭕ Kółko i Krzyżyk ❌',
         tictactoeSubtitle: 'Klasyczna gra dla dwóch graczy',
         backToMenu: '← Powrót do menu',
@@ -82,16 +65,12 @@ const translations = {
         winsO: 'Wygrane O',
         playerWins: 'Gracz',
         wins2: 'wygrywa!',
-        youWin: 'Wygrałeś! 🎉',
-        botWins: 'Bot wygrywa! 🤖',
+        youWin: '🎉 Wygrałeś!',
+        botWins: '🤖 Bot wygrywa!',
         draw: '🤝 Remis!',
         diffEasy: 'Łatwy',
         diffNormal: 'Normalny',
         diffHard: 'Trudny',
-        resultSaved: '💾 Wynik zapisany!',
-        resultNotSaved: '⚠️ Wynik nie zapisany (niezalogowany)',
-
-        // Statki
         battleshipTitle: '🚢 Statki 🎯',
         battleshipSubtitle: 'Zatop flotę przeciwnika!',
         yourFleet: '🚢 Twoja flota',
@@ -101,7 +80,7 @@ const translations = {
         destroyer: 'Niszczyciel',
         submarine: 'Łódź',
         setupPhase: 'Rozmieść swoje statki!',
-        clickAutoSetup: 'Kliknij „Rozstaw automatycznie"',
+        clickAutoSetup: 'Kliknij "Rozstaw automatycznie"',
         autoSetup: '🎲 Rozstaw automatycznie',
         startBattle: '⚔️ Rozpocznij bitwę!',
         yourBoard: 'Twoja plansza',
@@ -110,15 +89,15 @@ const translations = {
         yourMisses: 'Twoje pudła',
         enemyHits: 'Trafienia wroga',
         gamesWon: 'Wygrane gry',
-        shipsPlaced: '✅ Statki ustawione! Kliknij „Rozpocznij bitwę"',
-        placeShipsFirst: 'Najpierw rozstaw statki!',
+        shipsPlaced: '✅ Statki ustawione! Kliknij "Rozpocznij bitwę"',
+        placeShipsFirst: '⚠️ Najpierw rozstaw statki!',
         yourTurn: '🎯 Twoja tura — kliknij na planszę wroga!',
-        enemyTurn: 'Tura przeciwnika...',
+        enemyTurn: '⏳ Tura przeciwnika...',
         hitSuccess: '💥 Trafiony! Strzelaj dalej!',
         missedShot: '💦 Pudło! Kolej przeciwnika',
         shipSunk: '🔥 Zatopiony! Kontynuuj atak!',
         enemyHit: '💥 Przeciwnik trafił twój statek!',
-        enemyMissed: '💦 Przeciwnik spudłował! Twoja tura.',
+        enemyMissed: '💦 Przeciwnik spudłował!',
         enemySunkShip: '💀 Przeciwnik zatopił twój statek!',
         youWon: '🎉 ZWYCIĘSTWO! Zatopiłeś całą flotę wroga!',
         youLost: '💀 PORAŻKA! Twoja flota została zatopiona!',
@@ -132,43 +111,37 @@ const translations = {
         enterPlayerNick: 'Wpisz nick gracza...',
         backBtn: '← Powrót',
         opponent: 'Przeciwnik:',
+        loginRequired: '⚠️ Musisz być zalogowany aby grać online!',
         noPlayersFound: 'Nie znaleziono graczy',
         battleInProgress: 'Bitwa trwa!',
         victory: '🎉 ZWYCIĘSTWO! 🎉',
         defeat: '💀 PORAŻKA! 💀',
-        opponentTurn: 'Tura przeciwnika...',
+        savedToCloud: '☁️ Wynik zapisany!',
+        notLoggedSave: 'Zaloguj się, aby zapisywać wyniki'
     },
 
-    // ==================== ANGIELSKI ====================
     en: {
         logo: '🎮 Classic Games',
         guest: 'Guest',
         login: 'Log In',
         logout: 'Log Out',
-
         heroTitle: 'Welcome to the world of classic games!',
         heroSubtitle: 'Play legendary games, earn points and compete with friends',
-
         available: 'Available',
         comingSoon: 'Coming Soon',
         playNow: 'Play now →',
         soonText: 'Coming soon!',
         wins: 'wins',
         points: 'pts',
-
         tictactoe: 'Tic Tac Toe',
         tictactoeDesc: 'Classic strategy game. Align three symbols in a row and win!',
         hangman: 'Hangman',
         hangmanDesc: 'Guess the word before you run out of tries. Test your knowledge!',
         battleship: 'Battleship',
         battleshipDesc: 'Strategic naval battle. Sink the enemy fleet!',
-
         leaderboard: '🏆 Player Rankings',
         noPlayers: 'No players in ranking',
-        loadingLeaderboard: 'Loading ranking...',
-
         footer: '© 2025 Classic Games | Made with ❤️ for retro game lovers',
-
         welcome: '🎮 Welcome!',
         loginSubtitle: 'Log in or create a new account',
         loginTab: 'Login',
@@ -179,31 +152,24 @@ const translations = {
         loginBtn: 'Log In',
         registerBtn: 'Register',
         backToHome: '← Back',
-
+        enterUsername: 'Enter your username',
         enterPassword: 'Enter password',
         chooseUsername: 'Choose username',
         choosePassword: 'Choose password (min. 6 characters)',
         repeatPassword: 'Repeat password',
-
         loginSuccess: '✅ Login successful! Redirecting...',
-        loginError: 'Invalid email or password!',
-        loginTooManyAttempts: 'Too many attempts. Please wait.',
+        loginError: '❌ Invalid email or password!',
         registerSuccess: '✅ Registration successful! You can log in now.',
-        usernameTooShort: 'Username must be at least 3 characters!',
-        usernameInvalidChars: 'Username can only contain letters, numbers and _',
-        passwordTooShort: 'Password must be at least 6 characters!',
-        passwordMismatch: 'Passwords do not match!',
-        emailAlreadyUsed: 'This email is already registered!',
-        invalidEmail: 'Invalid email format!',
-        weakPassword: 'Password is too weak!',
-        loginRequired: 'You must be logged in to play online!',
-
+        usernameTooShort: '❌ Username must be at least 3 characters!',
+        passwordTooShort: '❌ Password must be at least 6 characters!',
+        passwordMismatch: '❌ Passwords do not match!',
+        usernameTaken: '❌ This username is already taken!',
         tictactoeTitle: '⭕ Tic Tac Toe ❌',
         tictactoeSubtitle: 'Classic game for two players',
         backToMenu: '← Back to menu',
         twoPlayers: '👥 2 Players',
         vsBot: '🤖 Play vs Bot',
-        selectDifficulty: 'Select difficulty:',
+        selectDifficulty: 'Select difficulty level:',
         easy: '😊 Easy',
         normal: '😐 Normal',
         hard: '😈 Hard',
@@ -218,15 +184,12 @@ const translations = {
         winsO: 'O Wins',
         playerWins: 'Player',
         wins2: 'wins!',
-        youWin: 'You Win! 🎉',
-        botWins: 'Bot wins! 🤖',
+        youWin: '🎉 You Win!',
+        botWins: '🤖 Bot wins!',
         draw: '🤝 Draw!',
         diffEasy: 'Easy',
         diffNormal: 'Normal',
         diffHard: 'Hard',
-        resultSaved: '💾 Result saved!',
-        resultNotSaved: '⚠️ Result not saved (not logged in)',
-
         battleshipTitle: '🚢 Battleship 🎯',
         battleshipSubtitle: 'Sink the enemy fleet!',
         yourFleet: '🚢 Your Fleet',
@@ -246,14 +209,14 @@ const translations = {
         enemyHits: 'Enemy Hits',
         gamesWon: 'Games Won',
         shipsPlaced: '✅ Ships placed! Click "Start Battle"',
-        placeShipsFirst: 'Place your ships first!',
+        placeShipsFirst: '⚠️ Place your ships first!',
         yourTurn: '🎯 Your turn — click on enemy board!',
-        enemyTurn: 'Enemy turn...',
+        enemyTurn: '⏳ Enemy turn...',
         hitSuccess: '💥 Hit! Shoot again!',
         missedShot: '💦 Miss! Enemy turn',
         shipSunk: '🔥 Sunk! Continue attack!',
         enemyHit: '💥 Enemy hit your ship!',
-        enemyMissed: '💦 Enemy missed! Your turn.',
+        enemyMissed: '💦 Enemy missed!',
         enemySunkShip: '💀 Enemy sunk your ship!',
         youWon: '🎉 VICTORY! You sunk the entire enemy fleet!',
         youLost: '💀 DEFEAT! Your fleet has been sunk!',
@@ -263,47 +226,41 @@ const translations = {
         botModeDesc: 'Play against AI',
         onlineModeDesc: 'Play with another player',
         findPlayer: 'Find player',
-        searchInfo: 'Search for registered player by nickname',
+        searchInfo: 'Search for a registered player by nickname',
         enterPlayerNick: 'Enter player nickname...',
         backBtn: '← Back',
         opponent: 'Opponent:',
+        loginRequired: '⚠️ You must be logged in to play online!',
         noPlayersFound: 'No players found',
         battleInProgress: 'Battle in progress!',
         victory: '🎉 VICTORY! 🎉',
         defeat: '💀 DEFEAT! 💀',
-        opponentTurn: 'Opponent\'s turn...',
+        savedToCloud: '☁️ Result saved!',
+        notLoggedSave: 'Log in to save results'
     },
 
-    // ==================== NIEMIECKI ====================
     de: {
         logo: '🎮 Klassische Spiele',
         guest: 'Gast',
         login: 'Anmelden',
         logout: 'Abmelden',
-
         heroTitle: 'Willkommen in der Welt der klassischen Spiele!',
         heroSubtitle: 'Spiele legendäre Spiele, sammle Punkte und trete gegen Freunde an',
-
         available: 'Verfügbar',
         comingSoon: 'Demnächst',
         playNow: 'Jetzt spielen →',
         soonText: 'Bald verfügbar!',
         wins: 'Siege',
         points: 'Pkt',
-
         tictactoe: 'Tic Tac Toe',
         tictactoeDesc: 'Klassisches Strategiespiel. Reihe drei Symbole auf und gewinne!',
         hangman: 'Galgenmännchen',
         hangmanDesc: 'Errate das Wort, bevor die Versuche ausgehen. Teste dein Wissen!',
         battleship: 'Schiffe Versenken',
         battleshipDesc: 'Strategische Seeschlacht. Versenke die feindliche Flotte!',
-
         leaderboard: '🏆 Spieler-Rangliste',
         noPlayers: 'Keine Spieler in der Rangliste',
-        loadingLeaderboard: 'Rangliste wird geladen...',
-
         footer: '© 2025 Klassische Spiele | Erstellt mit ❤️ für Retro-Spiel-Liebhaber',
-
         welcome: '🎮 Willkommen!',
         loginSubtitle: 'Melde dich an oder erstelle ein neues Konto',
         loginTab: 'Anmeldung',
@@ -314,25 +271,18 @@ const translations = {
         loginBtn: 'Anmelden',
         registerBtn: 'Registrieren',
         backToHome: '← Zurück',
-
-        enterPassword: 'Gib dein Passwort ein',
-        chooseUsername: 'Wähle einen Benutzernamen',
-        choosePassword: 'Wähle ein Passwort (mind. 6 Zeichen)',
-        repeatPassword: 'Wiederhole das Passwort',
-
+        enterUsername: 'Benutzernamen eingeben',
+        enterPassword: 'Passwort eingeben',
+        chooseUsername: 'Benutzernamen wählen',
+        choosePassword: 'Passwort wählen (mind. 6 Zeichen)',
+        repeatPassword: 'Passwort wiederholen',
         loginSuccess: '✅ Anmeldung erfolgreich! Weiterleitung...',
-        loginError: 'Ungültige E-Mail oder Passwort!',
-        loginTooManyAttempts: 'Zu viele Versuche. Bitte warte kurz.',
+        loginError: '❌ Ungültige E-Mail oder Passwort!',
         registerSuccess: '✅ Registrierung erfolgreich! Du kannst dich jetzt anmelden.',
-        usernameTooShort: 'Benutzername muss mindestens 3 Zeichen haben!',
-        usernameInvalidChars: 'Benutzername darf nur Buchstaben, Zahlen und _ enthalten',
-        passwordTooShort: 'Passwort muss mindestens 6 Zeichen haben!',
-        passwordMismatch: 'Passwörter stimmen nicht überein!',
-        emailAlreadyUsed: 'Diese E-Mail ist bereits registriert!',
-        invalidEmail: 'Ungültiges E-Mail-Format!',
-        weakPassword: 'Passwort ist zu schwach!',
-        loginRequired: 'Du musst angemeldet sein um online zu spielen!',
-
+        usernameTooShort: '❌ Benutzername muss mindestens 3 Zeichen haben!',
+        passwordTooShort: '❌ Passwort muss mindestens 6 Zeichen haben!',
+        passwordMismatch: '❌ Passwörter stimmen nicht überein!',
+        usernameTaken: '❌ Dieser Benutzername ist bereits vergeben!',
         tictactoeTitle: '⭕ Tic Tac Toe ❌',
         tictactoeSubtitle: 'Klassisches Spiel für zwei Spieler',
         backToMenu: '← Zurück zum Menü',
@@ -353,15 +303,12 @@ const translations = {
         winsO: 'O Siege',
         playerWins: 'Spieler',
         wins2: 'gewinnt!',
-        youWin: 'Du gewinnst! 🎉',
-        botWins: 'Bot gewinnt! 🤖',
+        youWin: '🎉 Du gewinnst!',
+        botWins: '🤖 Bot gewinnt!',
         draw: '🤝 Unentschieden!',
         diffEasy: 'Leicht',
         diffNormal: 'Normal',
         diffHard: 'Schwer',
-        resultSaved: '💾 Ergebnis gespeichert!',
-        resultNotSaved: '⚠️ Ergebnis nicht gespeichert (nicht angemeldet)',
-
         battleshipTitle: '🚢 Schiffe Versenken 🎯',
         battleshipSubtitle: 'Versenke die feindliche Flotte!',
         yourFleet: '🚢 Deine Flotte',
@@ -371,7 +318,7 @@ const translations = {
         destroyer: 'Zerstörer',
         submarine: 'U-Boot',
         setupPhase: 'Platziere deine Schiffe!',
-        clickAutoSetup: 'Klicke „Auto-Aufstellung"',
+        clickAutoSetup: 'Klicke "Auto-Aufstellung"',
         autoSetup: '🎲 Auto-Aufstellung',
         startBattle: '⚔️ Schlacht beginnen!',
         yourBoard: 'Dein Spielfeld',
@@ -380,15 +327,15 @@ const translations = {
         yourMisses: 'Deine Fehlschüsse',
         enemyHits: 'Gegnerische Treffer',
         gamesWon: 'Gewonnene Spiele',
-        shipsPlaced: '✅ Schiffe platziert! Klicke „Schlacht beginnen"',
-        placeShipsFirst: 'Platziere zuerst deine Schiffe!',
+        shipsPlaced: '✅ Schiffe platziert! Klicke "Schlacht beginnen"',
+        placeShipsFirst: '⚠️ Platziere zuerst deine Schiffe!',
         yourTurn: '🎯 Dein Zug — klicke auf das gegnerische Spielfeld!',
-        enemyTurn: 'Gegnerzug...',
+        enemyTurn: '⏳ Gegnerzug...',
         hitSuccess: '💥 Treffer! Schieße weiter!',
         missedShot: '💦 Daneben! Gegner ist dran',
         shipSunk: '🔥 Versenkt! Angriff fortsetzen!',
         enemyHit: '💥 Gegner hat dein Schiff getroffen!',
-        enemyMissed: '💦 Gegner hat verfehlt! Dein Zug.',
+        enemyMissed: '💦 Gegner hat verfehlt!',
         enemySunkShip: '💀 Gegner hat dein Schiff versenkt!',
         youWon: '🎉 SIEG! Du hast die gesamte feindliche Flotte versenkt!',
         youLost: '💀 NIEDERLAGE! Deine Flotte wurde versenkt!',
@@ -398,31 +345,31 @@ const translations = {
         botModeDesc: 'Spiele gegen KI',
         onlineModeDesc: 'Spiele mit einem anderen Spieler',
         findPlayer: 'Spieler finden',
-        searchInfo: 'Suche registrierten Spieler nach Nickname',
-        enterPlayerNick: 'Gib Spieler-Nickname ein...',
+        searchInfo: 'Registrierten Spieler nach Nickname suchen',
+        enterPlayerNick: 'Spieler-Nickname eingeben...',
         backBtn: '← Zurück',
         opponent: 'Gegner:',
+        loginRequired: '⚠️ Du musst angemeldet sein um online zu spielen!',
         noPlayersFound: 'Keine Spieler gefunden',
         battleInProgress: 'Schlacht im Gange!',
         victory: '🎉 SIEG! 🎉',
         defeat: '💀 NIEDERLAGE! 💀',
-        opponentTurn: 'Zug des Gegners...',
+        savedToCloud: '☁️ Ergebnis gespeichert!',
+        notLoggedSave: 'Anmelden um Ergebnisse zu speichern'
     }
 };
 
-// ==================== Stan języka ====================
-// Używamy obiektu żeby referencja była żywa w całym module
-const langState = {
-    current: localStorage.getItem('language') || 'pl'
-};
+let currentLanguage = localStorage.getItem('language') || 'pl';
 
 function t(key) {
-    return translations[langState.current]?.[key] ?? key;
+    const lang = translations[currentLanguage];
+    if (!lang) return key;
+    return lang[key] !== undefined ? lang[key] : (translations['pl'][key] || key);
 }
 
 function changeLanguage(lang) {
     if (!translations[lang]) return;
-    langState.current = lang;
+    currentLanguage = lang;
     localStorage.setItem('language', lang);
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -434,19 +381,17 @@ function changeLanguage(lang) {
     }
 }
 
-// Ustaw aktywny przycisk przy załadowaniu
-document.addEventListener('DOMContentLoaded', () => {
+function initLanguage() {
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-lang') === langState.current);
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLanguage);
     });
-});
+}
 
-// Eksport globalny
-window.t = t;
-window.changeLanguage = changeLanguage;
-window.translations = translations;
-// Getter żeby window.currentLanguage zawsze zwracał aktualną wartość
-Object.defineProperty(window, 'currentLanguage', {
-    get: () => langState.current,
-    configurable: true
-});
+document.addEventListener('DOMContentLoaded', initLanguage);
+
+if (typeof window !== 'undefined') {
+    window.t = t;
+    window.changeLanguage = changeLanguage;
+    window.translations = translations;
+    window.currentLanguage = currentLanguage;
+}
