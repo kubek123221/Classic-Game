@@ -337,3 +337,55 @@ h1 {
     .difficulty-btn { width: 100%; max-width: 200px; }
 }
 
+/* ===== ONLINE MODE ===== */
+.online-info-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--accent);
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.online-info-bar .leave-btn {
+    background: transparent;
+    border: 1px solid rgba(255,68,102,0.3);
+    color: var(--red);
+    padding: 6px 14px;
+    border-radius: 7px;
+    font-family: var(--font-display);
+    font-size: 0.65em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.online-info-bar .leave-btn:hover {
+    background: rgba(255,68,102,0.1);
+}
+
+/* ===== NAV PROFILE LINK ===== */
+.nav-profile-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    font-size: 1em;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.nav-profile-link:hover {
+    background: rgba(0,212,255,0.15);
+    border-color: var(--accent);
+    transform: scale(1.05);
+}
